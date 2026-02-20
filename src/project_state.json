@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "New project",
+  "architectural_notes": [],
+  "known_issues": [],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-update-text-colors-throughout-the-application-to-ensure-optimal-contrast-and-readability-particularly-for-text-overlays-on-background-images-hero-section-contact-section-product-cards",
+      "title": "Update text colors throughout the application to ensure optimal contrast and readability, particularly for text overlays on background images (hero section, contact section, product cards)",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-review-and-enhance-text-styling-in-the-herosection-component-where-text-appears-over-the-furnace-background-image-ensuring-the-gradient-overlay-provides-sufficient-contrast-for-white-text",
+      "title": "Review and enhance text styling in the HeroSection component where text appears over the furnace background image, ensuring the gradient overlay provides sufficient contrast for white text",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-enhance-text-visibility-in-the-contactsection-component-where-the-whatsapp-contact-information-appears-over-the-refinery-interior-background-image",
+      "title": "Enhance text visibility in the ContactSection component where the WhatsApp contact information appears over the refinery interior background image",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-improve-text-contrast-in-productcard-components-especially-for-product-titles-and-purity-badge-text",
+      "title": "Improve text contrast in ProductCard components, especially for product titles and purity badge text",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-review-and-optimize-text-colors-in-the-liveratesdashboard-to-ensure-price-displays-gst-breakdown-and-percentage-changes-are-easily-readable",
+      "title": "Review and optimize text colors in the LiveRatesDashboard to ensure price displays, GST breakdown, and percentage changes are easily readable",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Improve text visibility with better color contrast",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "projectName": "Improve text visibility and contrast",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

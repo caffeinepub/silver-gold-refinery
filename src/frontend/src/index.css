@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* OKLCH color system for light mode - Enhanced for better contrast */
+    --background: oklch(98% 0 0);
+    --foreground: oklch(10% 0 0); /* Darker for better contrast */
+    --card: oklch(100% 0 0);
+    --card-foreground: oklch(10% 0 0); /* Darker for better contrast */
+    --popover: oklch(100% 0 0);
+    --popover-foreground: oklch(10% 0 0); /* Darker for better contrast */
+    --primary: oklch(45% 0.15 275);
+    --primary-foreground: oklch(100% 0 0); /* Pure white for maximum contrast */
+    --secondary: oklch(92% 0.02 275);
+    --secondary-foreground: oklch(10% 0 0); /* Darker for better contrast */
+    --muted: oklch(92% 0.02 275);
+    --muted-foreground: oklch(45% 0.02 275); /* Darker for better readability */
+    --accent: oklch(92% 0.02 275);
+    --accent-foreground: oklch(10% 0 0); /* Darker for better contrast */
+    --destructive: oklch(55% 0.22 25);
+    --destructive-foreground: oklch(100% 0 0); /* Pure white for maximum contrast */
+    --border: oklch(88% 0.02 275);
+    --input: oklch(88% 0.02 275);
+    --ring: oklch(45% 0.15 275);
+    --radius: 0.5rem;
+    --chart-1: oklch(60% 0.15 275);
+    --chart-2: oklch(70% 0.12 150);
+    --chart-3: oklch(65% 0.18 50);
+    --chart-4: oklch(75% 0.10 200);
+    --chart-5: oklch(68% 0.14 320);
+
+    /* Metallic theme colors - Enhanced for better visibility */
+    --gold: oklch(65% 0.18 85); /* Slightly darker for better contrast */
+    --gold-foreground: oklch(10% 0 0); /* Dark text on gold backgrounds */
+    --silver: oklch(70% 0.02 240); /* Adjusted for better visibility */
+    --silver-foreground: oklch(10% 0 0); /* Dark text on silver backgrounds */
+    --silver-light: oklch(90% 0.02 240); /* Brighter for text on dark backgrounds */
+  }
+
+  .dark {
+    /* OKLCH color system for dark mode - Enhanced for better contrast */
+    --background: oklch(15% 0.02 275);
+    --foreground: oklch(100% 0 0); /* Pure white for maximum contrast */
+    --card: oklch(18% 0.02 275);
+    --card-foreground: oklch(100% 0 0); /* Pure white for maximum contrast */
+    --popover: oklch(18% 0.02 275);
+    --popover-foreground: oklch(100% 0 0); /* Pure white for maximum contrast */
+    --primary: oklch(65% 0.18 275);
+    --primary-foreground: oklch(10% 0 0); /* Dark for contrast on bright primary */
+    --secondary: oklch(25% 0.04 275);
+    --secondary-foreground: oklch(100% 0 0); /* Pure white for maximum contrast */
+    --muted: oklch(25% 0.04 275);
+    --muted-foreground: oklch(70% 0.04 275); /* Brighter for better readability */
+    --accent: oklch(25% 0.04 275);
+    --accent-foreground: oklch(100% 0 0); /* Pure white for maximum contrast */
+    --destructive: oklch(55% 0.22 25);
+    --destructive-foreground: oklch(100% 0 0); /* Pure white for maximum contrast */
+    --border: oklch(25% 0.04 275);
+    --input: oklch(25% 0.04 275);
+    --ring: oklch(65% 0.18 275);
+    --chart-1: oklch(60% 0.15 275);
+    --chart-2: oklch(70% 0.12 150);
+    --chart-3: oklch(65% 0.18 50);
+    --chart-4: oklch(75% 0.10 200);
+    --chart-5: oklch(68% 0.14 320);
+
+    /* Metallic theme colors for dark mode - Enhanced for better visibility */
+    --gold: oklch(80% 0.20 85); /* Brighter for better visibility on dark */
+    --gold-foreground: oklch(10% 0 0); /* Dark text on gold backgrounds */
+    --silver: oklch(75% 0.02 240); /* Brighter for better visibility */
+    --silver-foreground: oklch(10% 0 0); /* Dark text on silver backgrounds */
+    --silver-light: oklch(92% 0.02 240); /* Very bright for text on dark backgrounds */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* MCX-style ticker scrolling animation - 3x faster (3.33s instead of 10s) */
+@keyframes scroll-ticker {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-33.33%);
+  }
+}
+
+.animate-scroll-ticker {
+  animation: scroll-ticker 3.33s linear infinite;
+}

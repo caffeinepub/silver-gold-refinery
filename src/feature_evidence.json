@@ -1,0 +1,102 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-update-text-colors-throughout-the-application-to-ensure-optimal-contrast-and-readability-particularly-for-text-overlays-on-background-images-hero-section-contact-section-product-cards",
+      "featureTitle": "Update text colors throughout the application to ensure optimal contrast and readability, particularly for text overlays on background images (hero section, contact section, product cards)",
+      "files": [
+        "frontend/src/index.css"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-review-and-enhance-text-styling-in-the-herosection-component-where-text-appears-over-the-furnace-background-image-ensuring-the-gradient-overlay-provides-sufficient-contrast-for-white-text",
+      "featureTitle": "Review and enhance text styling in the HeroSection component where text appears over the furnace background image, ensuring the gradient overlay provides sufficient contrast for white text",
+      "files": [
+        "frontend/src/components/HeroSection.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-enhance-text-visibility-in-the-contactsection-component-where-the-whatsapp-contact-information-appears-over-the-refinery-interior-background-image",
+      "featureTitle": "Enhance text visibility in the ContactSection component where the WhatsApp contact information appears over the refinery interior background image",
+      "files": [
+        "frontend/src/components/ContactSection.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-improve-text-contrast-in-productcard-components-especially-for-product-titles-and-purity-badge-text",
+      "featureTitle": "Improve text contrast in ProductCard components, especially for product titles and purity badge text",
+      "files": [
+        "frontend/src/components/ProductCard.tsx",
+        "frontend/src/components/ProductsSection.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-review-and-optimize-text-colors-in-the-liveratesdashboard-to-ensure-price-displays-gst-breakdown-and-percentage-changes-are-easily-readable",
+      "featureTitle": "Review and optimize text colors in the LiveRatesDashboard to ensure price displays, GST breakdown, and percentage changes are easily readable",
+      "files": [
+        "frontend/src/components/LiveRatesDashboard.tsx",
+        "frontend/src/components/MetalTicker.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "kind": "build_request",
+  "title": "Improve text visibility and contrast",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Update text colors throughout the application to ensure optimal contrast and readability, particularly for text overlays on background images (hero section, contact section, product cards)",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-15"
+        ],
+        "quotes": [
+          "just change the text to best visibility"
+        ]
+      },
+      "acceptanceCriteria": [
+        "All text elements have sufficient contrast ratio (WCAG AA minimum 4.5:1 for normal text, 3:1 for large text)",
+        "Text on image backgrounds is clearly readable without strain",
+        "Color adjustments maintain the existing design aesthetic",
+        "Text remains visible in both light and dark conditions"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Review and enhance text styling in the HeroSection component where text appears over the furnace background image, ensuring the gradient overlay provides sufficient contrast for white text",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-15"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Hero section heading and subheading are clearly visible against the background",
+        "Gradient overlay is adjusted if needed to improve text legibility"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Enhance text visibility in the ContactSection component where the WhatsApp contact information appears over the refinery interior background image",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-15"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Contact card text is easily readable",
+        "Phone number and WhatsApp button have strong contrast against the background"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Improve text contrast in ProductCard components, especially for product titles and purity badge text",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-15"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Product titles are clearly legible",
+        "Badge text for purity levels has sufficient contrast",
+        "Hover states maintain readability"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Review and optimize text colors in the LiveRatesDashboard to ensure price displays, GST breakdown, and percentage changes are easily readable",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-15"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Price values are prominently visible",
+        "Positive/negative percentage changes have clear visual distinction",
+        "GST breakdown text is legible"
+      ]
+    }
+  ],
+  "constraints": [
+    "Maintain the existing OKLCH color system defined in the Tailwind configuration",
+    "Preserve the metallic gold/silver theme and visual identity",
+    "Do not modify the backend/main.mo file",
+    "Keep the existing layout and component structure intact"
+  ],
+  "nonGoals": [
+    "Redesigning the overall layout or component structure",
+    "Adding new features or functionality",
+    "Changing the color scheme or brand identity",
+    "Modifying animation timings or effects"
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}
