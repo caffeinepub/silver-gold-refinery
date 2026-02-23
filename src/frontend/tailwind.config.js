@@ -82,7 +82,9 @@ export default {
                 sm: 'calc(var(--radius) - 4px)'
             },
             boxShadow: {
-                xs: '0 1px 2px 0 rgba(0,0,0,0.05)'
+                xs: '0 1px 2px 0 rgba(0,0,0,0.05)',
+                'gold': '0 10px 40px -10px rgba(255, 215, 0, 0.5)',
+                'silver': '0 10px 40px -10px rgba(192, 192, 192, 0.5)'
             },
             fontFamily: {
                 sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'sans-serif']
@@ -99,12 +101,22 @@ export default {
                 'scroll-ticker': {
                     '0%': { transform: 'translateX(0)' },
                     '100%': { transform: 'translateX(-33.333%)' }
+                },
+                'fade-in': {
+                    '0%': { opacity: '0' },
+                    '100%': { opacity: '1' }
+                },
+                'slide-in-from-top': {
+                    '0%': { transform: 'translateY(-20px)', opacity: '0' },
+                    '100%': { transform: 'translateY(0)', opacity: '1' }
                 }
             },
             animation: {
                 'accordion-down': 'accordion-down 0.2s ease-out',
                 'accordion-up': 'accordion-up 0.2s ease-out',
-                'scroll-ticker': 'scroll-ticker 30s linear infinite'
+                'scroll-ticker': 'scroll-ticker 30s linear infinite',
+                'fade-in': 'fade-in 0.5s ease-out',
+                'slide-in-from-top': 'slide-in-from-top 0.5s ease-out'
             }
         }
     },

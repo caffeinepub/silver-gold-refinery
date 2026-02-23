@@ -1,99 +1,78 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Improve text visibility and contrast",
+  "title": "Fix live pricing with Kolkata INR rates and 5-minute auto-refresh",
   "requirements": [
     {
-      "id": "REQ-1",
-      "summary": "Update text colors throughout the application to ensure optimal contrast and readability, particularly for text overlays on background images",
-      "acceptanceCriteria": [
-        "All text elements have sufficient contrast ratio (WCAG AA minimum 4.5:1 for normal text, 3:1 for large text)",
-        "Text on image backgrounds is clearly readable without strain",
-        "Color adjustments maintain the existing design aesthetic",
-        "Text remains visible in both light and dark conditions"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/index.css",
-          "operation": "modify",
-          "description": "Enhance global text color variables in the OKLCH color system to improve base text contrast. Ensure foreground color values provide strong contrast against background colors while maintaining the metallic theme. Review and adjust the --foreground, --card-foreground, --popover-foreground, and --primary-foreground variables for both light and dark themes to meet WCAG AA standards."
-        },
-        {
-          "path": "frontend/tailwind.config.js",
-          "operation": "modify",
-          "description": "Review and optimize color token definitions to ensure all text-related color utilities provide sufficient contrast. Verify that custom gold and silver color values work well for text overlays. Add any necessary color utilities for enhanced text contrast on image backgrounds if needed."
-        }
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "summary": "Review and enhance text styling in the HeroSection component where text appears over the furnace background image",
-      "acceptanceCriteria": [
-        "Hero section heading and subheading are clearly visible against the background",
-        "Gradient overlay is adjusted if needed to improve text legibility"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/HeroSection.tsx",
-          "operation": "modify",
-          "description": "Enhance the gradient overlay darkness or opacity to provide stronger contrast for white text elements. Review the heading and subheading text colors, potentially adding text-shadow or adjusting to use brighter/bolder color values. Ensure the text remains clearly visible against the generated/furnace-hero.dim_1920x1080.png background image. Consider increasing gradient opacity from current rgba values or adding a semi-transparent dark backdrop behind text content."
-        }
-      ]
-    },
-    {
       "id": "REQ-3",
-      "summary": "Enhance text visibility in the ContactSection component where the WhatsApp contact information appears over the refinery interior background image",
+      "summary": "Display gold price formatted as Indian Rupees per 10 grams with proper formatting",
       "acceptanceCriteria": [
-        "Contact card text is easily readable",
-        "Phone number and WhatsApp button have strong contrast against the background"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/ContactSection.tsx",
-          "operation": "modify",
-          "description": "Improve the contact card's background opacity or add a stronger backdrop to ensure phone number 9518553890 and WhatsApp button text are clearly readable over the generated/refinery-interior.dim_1200x800.png background. Consider increasing the card's background opacity, adding a subtle shadow, or adjusting text colors to darker/bolder values for better contrast. Ensure the WhatsApp button maintains strong visual distinction."
-        }
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "summary": "Improve text contrast in ProductCard components, especially for product titles and purity badge text",
-      "acceptanceCriteria": [
-        "Product titles are clearly legible",
-        "Badge text for purity levels has sufficient contrast",
-        "Hover states maintain readability"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/ProductCard.tsx",
-          "operation": "modify",
-          "description": "Enhance text contrast for product titles and purity badges. Review and adjust title text color to ensure strong contrast against card backgrounds. For color-coded badges (gold/silver products), verify badge text colors provide sufficient contrast against badge backgrounds. Ensure hover state text remains clearly readable. Consider using darker text colors or adjusting badge background opacity."
-        },
-        {
-          "path": "frontend/src/components/ProductsSection.tsx",
-          "operation": "modify",
-          "description": "Review overlay text on refinery process images (generated/molten-silver.dim_1200x800.png and generated/refinery-machinery.dim_1200x800.png) to ensure text visibility. Adjust overlay darkness, text shadows, or text colors as needed to improve readability during hover effects."
-        }
-      ]
-    },
-    {
-      "id": "REQ-5",
-      "summary": "Review and optimize text colors in the LiveRatesDashboard to ensure price displays, GST breakdown, and percentage changes are easily readable",
-      "acceptanceCriteria": [
-        "Price values are prominently visible",
-        "Positive/negative percentage changes have clear visual distinction",
-        "GST breakdown text is legible"
+        "Gold price displays with rupee symbol (₹)",
+        "Price is shown per 10 grams unit",
+        "Uses Indian number formatting with commas (e.g., 1,59,000)"
       ],
       "file_operations": [
         {
           "path": "frontend/src/components/LiveRatesDashboard.tsx",
           "operation": "modify",
-          "description": "Enhance contrast for price values to make them more prominent. Review and strengthen colors used for positive/negative percentage changes to ensure clear visual distinction while maintaining accessibility. Verify GST breakdown text (3% total: 1.5% CGST + 1.5% SGST) has sufficient contrast. Consider using bolder font weights or adjusting text colors for better readability."
+          "description": "Update gold price display to show proper unit label '/10g' and ensure Indian Rupee symbol (₹) is consistently used. Verify that the formatIndianNumber utility correctly formats prices with Indian comma grouping (e.g., 1,59,000 instead of 159,000)."
         },
         {
           "path": "frontend/src/components/MetalTicker.tsx",
           "operation": "modify",
-          "description": "Review text contrast in the MCX-style scrolling ticker displaying company name and live rates. Ensure all ticker text (company name, metal prices, trend indicators) has strong contrast against the ticker background. Verify Indian number formatting and percentage displays remain clearly legible throughout the 3.33s animation cycle."
+          "description": "Update ticker display for gold to show '/10g' unit suffix and ensure rupee symbol formatting matches the dashboard. Maintain animated price change indicators while displaying the correct unit."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Display silver price formatted as Indian Rupees per kilogram with proper formatting",
+      "acceptanceCriteria": [
+        "Silver price displays with rupee symbol (₹)",
+        "Price is shown per kilogram unit",
+        "Uses Indian number formatting with commas (e.g., 2,65,000)"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/LiveRatesDashboard.tsx",
+          "operation": "modify",
+          "description": "Update silver price display to show proper unit label '/kg' and ensure Indian Rupee symbol (₹) is consistently used. Verify that the formatIndianNumber utility correctly formats prices with Indian comma grouping (e.g., 2,65,000)."
+        },
+        {
+          "path": "frontend/src/components/MetalTicker.tsx",
+          "operation": "modify",
+          "description": "Update ticker display for silver to show '/kg' unit suffix and ensure rupee symbol formatting matches the dashboard. Maintain animated price change indicators while displaying the correct unit."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Enable automatic price updates without user interaction by polling backend every 5 minutes",
+      "acceptanceCriteria": [
+        "No manual refresh button or action required",
+        "Prices update automatically in background every 5 minutes",
+        "UI reflects latest prices without page reload"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/config/refresh.ts",
+          "operation": "modify",
+          "description": "Update React Query refetch interval from 15 seconds to 300 seconds (5 minutes) to match backend refresh cadence. Ensure refetchInterval is set to 300000 milliseconds and refetchIntervalInBackground is true so polling continues even when tab is not focused."
+        },
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Ensure the metal prices query uses the updated 5-minute refresh configuration from frontend/src/config/refresh.ts. Verify that the query automatically refetches from the backend every 5 minutes without requiring user interaction. Remove any manual refresh logic if present."
+        },
+        {
+          "path": "frontend/src/components/LiveRatesDashboard.tsx",
+          "operation": "modify",
+          "description": "Remove any manual refresh buttons or controls if present. Ensure the component passively displays prices from the useQueries hook without providing refresh actions to users. The UI should automatically update when React Query refetches data every 5 minutes."
+        },
+        {
+          "path": "frontend/src/components/MetalTicker.tsx",
+          "operation": "modify",
+          "description": "Ensure ticker automatically reflects updated prices when React Query refetches data. Remove any manual refresh functionality if present. The ticker should seamlessly update with new prices from the 5-minute polling cycle."
         }
       ]
     }

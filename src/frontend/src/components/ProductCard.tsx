@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { CheckCircle2 } from 'lucide-react';
+import { memo } from 'react';
 
 interface ProductCardProps {
   title: string;
@@ -10,7 +11,7 @@ interface ProductCardProps {
   color: 'gold' | 'silver';
 }
 
-export default function ProductCard({ title, image, purityLevels, formats, color }: ProductCardProps) {
+const ProductCard = memo(function ProductCard({ title, image, purityLevels, formats, color }: ProductCardProps) {
   return (
     <Card className="overflow-hidden hover:shadow-xl transition-shadow duration-300 border-2">
       <div className="relative h-64 overflow-hidden bg-muted">
@@ -18,6 +19,7 @@ export default function ProductCard({ title, image, purityLevels, formats, color
           src={image} 
           alt={title}
           className="w-full h-full object-cover"
+          loading="lazy"
         />
         <div className="absolute top-4 right-4">
           <Badge 
@@ -65,4 +67,6 @@ export default function ProductCard({ title, image, purityLevels, formats, color
       </CardContent>
     </Card>
   );
-}
+});
+
+export default ProductCard;

@@ -84,6 +84,17 @@
   }
 }
 
+/* Smooth transitions for all interactive elements */
+@layer utilities {
+  .transition-smooth {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .transition-bounce {
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+}
+
 /* MCX-style ticker scrolling animation - 3x faster (3.33s instead of 10s) */
 @keyframes scroll-ticker {
   0% {

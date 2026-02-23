@@ -1,18 +1,19 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Download, Instagram } from 'lucide-react';
+import { useCallback } from 'react';
 
 export default function SocialMediaAssets() {
   const imagePath = '/assets/generated/instagram-sponsor.dim_1080x1080.png';
 
-  const handleDownload = () => {
+  const handleDownload = useCallback(() => {
     const link = document.createElement('a');
     link.href = imagePath;
     link.download = 'gururaj-silver-refinery-instagram-sponsor.png';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  };
+  }, [imagePath]);
 
   return (
     <section className="py-20 bg-background">
@@ -48,6 +49,7 @@ export default function SocialMediaAssets() {
                     src={imagePath}
                     alt="Instagram sponsorship post for live gold and silver rates"
                     className="w-full h-auto rounded-lg shadow-md border-2 border-border"
+                    loading="lazy"
                   />
                 </div>
               </div>

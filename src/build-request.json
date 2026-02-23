@@ -1,97 +1,114 @@
 {
   "kind": "build_request",
-  "title": "Improve text visibility and contrast",
-  "priority": "normal",
+  "title": "Fix live pricing with Kolkata INR rates and 5-minute auto-refresh",
+  "projectName": "Silver Gold Refinery",
+  "priority": "high",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Update text colors throughout the application to ensure optimal contrast and readability, particularly for text overlays on background images (hero section, contact section, product cards)",
-      "target": "frontend",
+      "text": "Configure backend to fetch live gold and silver prices specifically for Kolkata location in Indian Rupees (INR)",
+      "target": "backend",
       "source": {
         "messageIds": [
-          "msg-15"
+          "msg-14"
         ],
         "quotes": [
-          "just change the text to best visibility"
+          "Pricing should be in indian rs and kolkata location"
         ]
       },
       "acceptanceCriteria": [
-        "All text elements have sufficient contrast ratio (WCAG AA minimum 4.5:1 for normal text, 3:1 for large text)",
-        "Text on image backgrounds is clearly readable without strain",
-        "Color adjustments maintain the existing design aesthetic",
-        "Text remains visible in both light and dark conditions"
+        "Backend fetches prices from a reliable precious metals API that supports Kolkata location filtering",
+        "Prices are returned in Indian Rupees (INR) currency",
+        "Gold price is approximately ₹159,000 per 10 grams",
+        "Silver price is approximately ₹265,000 per kilogram"
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Review and enhance text styling in the HeroSection component where text appears over the furnace background image, ensuring the gradient overlay provides sufficient contrast for white text",
-      "target": "frontend",
+      "text": "Set automatic price refresh interval to exactly 5 minutes (300 seconds)",
+      "target": "backend",
       "source": {
         "messageIds": [
-          "msg-15"
+          "msg-14"
+        ],
+        "quotes": [
+          "Every 5 minutes"
         ]
       },
       "acceptanceCriteria": [
-        "Hero section heading and subheading are clearly visible against the background",
-        "Gradient overlay is adjusted if needed to improve text legibility"
+        "Backend timer triggers price updates every 300 seconds",
+        "No manual refresh required from user",
+        "Timer starts automatically when canister initializes"
       ]
     },
     {
       "id": "REQ-3",
-      "text": "Enhance text visibility in the ContactSection component where the WhatsApp contact information appears over the refinery interior background image",
+      "text": "Display gold price formatted as Indian Rupees per 10 grams (e.g., ₹159,000/10g)",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-15"
+          "msg-14"
+        ],
+        "quotes": [
+          "For gold it is 159000/10g"
         ]
       },
       "acceptanceCriteria": [
-        "Contact card text is easily readable",
-        "Phone number and WhatsApp button have strong contrast against the background"
+        "Gold price displays with rupee symbol (₹)",
+        "Price is shown per 10 grams unit",
+        "Uses Indian number formatting with commas (e.g., 1,59,000)"
       ]
     },
     {
       "id": "REQ-4",
-      "text": "Improve text contrast in ProductCard components, especially for product titles and purity badge text",
+      "text": "Display silver price formatted as Indian Rupees per kilogram (e.g., ₹265,000/kg)",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-15"
+          "msg-14"
+        ],
+        "quotes": [
+          "For Silver it is 265000/kg"
         ]
       },
       "acceptanceCriteria": [
-        "Product titles are clearly legible",
-        "Badge text for purity levels has sufficient contrast",
-        "Hover states maintain readability"
+        "Silver price displays with rupee symbol (₹)",
+        "Price is shown per kilogram unit",
+        "Uses Indian number formatting with commas (e.g., 2,65,000)"
       ]
     },
     {
       "id": "REQ-5",
-      "text": "Review and optimize text colors in the LiveRatesDashboard to ensure price displays, GST breakdown, and percentage changes are easily readable",
-      "target": "frontend",
+      "text": "Remove all manual refresh requirements - prices must update automatically without user interaction",
+      "target": "both",
       "source": {
         "messageIds": [
-          "msg-15"
+          "msg-12"
+        ],
+        "quotes": [
+          "i cannot manually refresh"
         ]
       },
       "acceptanceCriteria": [
-        "Price values are prominently visible",
-        "Positive/negative percentage changes have clear visual distinction",
-        "GST breakdown text is legible"
+        "No manual refresh button or action required",
+        "Prices update automatically in background every 5 minutes",
+        "UI reflects latest prices without page reload"
       ]
     }
   ],
   "constraints": [
-    "Maintain the existing OKLCH color system defined in the Tailwind configuration",
-    "Preserve the metallic gold/silver theme and visual identity",
-    "Do not modify the backend/main.mo file",
-    "Keep the existing layout and component structure intact"
+    "Maintain 5-minute (300 second) refresh interval exactly as specified",
+    "Prices must be in Indian Rupees (INR) for Kolkata location only",
+    "Gold pricing unit must be per 10 grams",
+    "Silver pricing unit must be per kilogram",
+    "No manual refresh mechanisms allowed"
   ],
   "nonGoals": [
-    "Redesigning the overall layout or component structure",
-    "Adding new features or functionality",
-    "Changing the color scheme or brand identity",
-    "Modifying animation timings or effects"
+    "Support for other currencies besides INR",
+    "Support for other locations besides Kolkata",
+    "Manual refresh buttons or controls",
+    "Different refresh intervals or configurable timing",
+    "Historical price charts or trends"
   ],
   "imageRequirements": {
     "required": [],

@@ -1,71 +1,68 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-20T19:19:06.171Z",
+  "generatedAt": "2026-02-23T18:40:42.470Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
     "total": 5,
-    "implemented": 5,
+    "implemented": 3,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Update text colors throughout the application to ensure optimal contrast and readability, particularly for text overlays on background images (hero section, contact section, product cards)",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/index.css",
-          "frontend/tailwind.config.js"
-        ],
-        "matchedFiles": [
-          "frontend/src/index.css"
-        ]
+        "summary": "Configure backend to fetch live gold and silver prices specifically for Kolkata location in Indian Rupees (INR)",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
       },
       {
         "id": "REQ-2",
-        "summary": "Review and enhance text styling in the HeroSection component where text appears over the furnace background image, ensuring the gradient overlay provides sufficient contrast for white text",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/HeroSection.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/HeroSection.tsx"
-        ]
+        "summary": "Set automatic price refresh interval to exactly 5 minutes (300 seconds)",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
       },
       {
         "id": "REQ-3",
-        "summary": "Enhance text visibility in the ContactSection component where the WhatsApp contact information appears over the refinery interior background image",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/ContactSection.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/ContactSection.tsx"
-        ]
-      },
-      {
-        "id": "REQ-4",
-        "summary": "Improve text contrast in ProductCard components, especially for product titles and purity badge text",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/ProductCard.tsx",
-          "frontend/src/components/ProductsSection.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/ProductCard.tsx",
-          "frontend/src/components/ProductsSection.tsx"
-        ]
-      },
-      {
-        "id": "REQ-5",
-        "summary": "Review and optimize text colors in the LiveRatesDashboard to ensure price displays, GST breakdown, and percentage changes are easily readable",
+        "summary": "Display gold price formatted as Indian Rupees per 10 grams (e.g., ₹159,000/10g)",
         "status": "implemented",
         "plannedFiles": [
           "frontend/src/components/LiveRatesDashboard.tsx",
           "frontend/src/components/MetalTicker.tsx"
         ],
         "matchedFiles": [
+          "frontend/src/components/LiveRatesDashboard.tsx",
+          "frontend/src/components/MetalTicker.tsx"
+        ]
+      },
+      {
+        "id": "REQ-4",
+        "summary": "Display silver price formatted as Indian Rupees per kilogram (e.g., ₹265,000/kg)",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/LiveRatesDashboard.tsx",
+          "frontend/src/components/MetalTicker.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/LiveRatesDashboard.tsx",
+          "frontend/src/components/MetalTicker.tsx"
+        ]
+      },
+      {
+        "id": "REQ-5",
+        "summary": "Remove all manual refresh requirements - prices must update automatically without user interaction",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/config/refresh.ts",
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/components/LiveRatesDashboard.tsx",
+          "frontend/src/components/MetalTicker.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/config/refresh.ts",
+          "frontend/src/hooks/useQueries.ts",
           "frontend/src/components/LiveRatesDashboard.tsx",
           "frontend/src/components/MetalTicker.tsx"
         ]
@@ -73,17 +70,17 @@
     ]
   },
   "changedFiles": [
+    "backend/main.mo",
     "build-request.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/components/ContactSection.tsx",
-    "frontend/src/components/HeroSection.tsx",
+    "frontend/src/backend.d.ts",
     "frontend/src/components/LiveRatesDashboard.tsx",
     "frontend/src/components/MetalTicker.tsx",
-    "frontend/src/components/ProductCard.tsx",
-    "frontend/src/components/ProductsSection.tsx",
-    "frontend/src/index.css",
+    "frontend/src/config/fallback.ts",
+    "frontend/src/config/refresh.ts",
+    "frontend/src/hooks/useQueries.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

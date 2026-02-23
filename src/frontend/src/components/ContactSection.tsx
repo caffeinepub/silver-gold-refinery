@@ -2,10 +2,15 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { MessageCircle, Phone } from 'lucide-react';
 import { SiWhatsapp } from 'react-icons/si';
+import { useCallback } from 'react';
 
 export default function ContactSection() {
   const phoneNumber = '9518553890';
   const whatsappUrl = `https://wa.me/91${phoneNumber}`;
+
+  const handleWhatsAppClick = useCallback(() => {
+    window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+  }, [whatsappUrl]);
 
   return (
     <section className="py-20 bg-muted/50 relative">

@@ -35,6 +35,7 @@ export default function ProductsSection() {
               src="/assets/generated/refinery-machinery.dim_1200x800.png"
               alt="Advanced refinery machinery"
               className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
+              loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/50 to-transparent flex items-end p-6">
               <div>
@@ -49,6 +50,7 @@ export default function ProductsSection() {
               src="/assets/generated/molten-silver.dim_1200x800.png"
               alt="Molten silver refining process"
               className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
+              loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/50 to-transparent flex items-end p-6">
               <div>

@@ -5,11 +5,13 @@ import ProductsSection from './components/ProductsSection';
 import ContactSection from './components/ContactSection';
 import SocialMediaAssets from './components/SocialMediaAssets';
 import Footer from './components/Footer';
+import FloatingCallButton from './components/FloatingCallButton';
 
 function App() {
   return (
     <div className="min-h-screen flex flex-col">
       <MetalTicker />
+      <FloatingCallButton />
       <HeroSection />
       <LiveRatesDashboard />
       <ProductsSection />

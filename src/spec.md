@@ -1,13 +1,13 @@
 # Specification
 
 ## Summary
-**Goal:** Improve text visibility and contrast throughout the application to ensure all text is easily readable.
+**Goal:** Implement automatic live pricing for gold and silver with Kolkata INR rates that refresh every 5 minutes without manual intervention.
 
 **Planned changes:**
-- Update text colors to ensure optimal contrast ratios (WCAG AA compliance: 4.5:1 for normal text, 3:1 for large text)
-- Enhance text visibility in HeroSection over the furnace background image
-- Improve text readability in ContactSection over the refinery interior background
-- Strengthen contrast for ProductCard titles and purity badges
-- Optimize text colors in LiveRatesDashboard for price displays and percentage changes
+- Configure backend to fetch live gold and silver prices specifically for Kolkata location in Indian Rupees (INR)
+- Set automatic price refresh to exactly 5 minutes (300 seconds) with no manual refresh required
+- Display gold price as ₹/10g with Indian number formatting (e.g., ₹1,59,000/10g)
+- Display silver price as ₹/kg with Indian number formatting (e.g., ₹2,65,000/kg)
+- Remove all manual refresh mechanisms - prices update automatically in background
 
-**User-visible outcome:** All text elements across the application will be clearly readable with improved contrast, making content easier to read without strain while maintaining the existing metallic gold/silver aesthetic.
+**User-visible outcome:** Users see live gold and silver prices in Indian Rupees for Kolkata location that automatically update every 5 minutes without any manual action, with gold priced per 10 grams and silver per kilogram.

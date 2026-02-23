@@ -1,46 +1,35 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "New project",
-  "architectural_notes": [],
+  "summary": "Precious metals pricing app displaying live gold and silver rates in Indian Rupees for Kolkata location with automatic 5-minute refresh",
+  "architectural_notes": [
+    "Auto-refresh pricing every 5 minutes",
+    "Display format: Gold ₹159,000/10g, Silver ₹265,000/kg",
+    "Location filter: Kolkata, India",
+    "Currency: Indian Rupees (INR)"
+  ],
   "known_issues": [],
-  "isFixRequest": false,
+  "isFixRequest": true,
   "existing_features": [
     {
-      "id": "feature-update-text-colors-throughout-the-application-to-ensure-optimal-contrast-and-readability-particularly-for-text-overlays-on-background-images-hero-section-contact-section-product-cards",
-      "title": "Update text colors throughout the application to ensure optimal contrast and readability, particularly for text overlays on background images (hero section, contact section, product cards)",
-      "reqIds": [
-        "REQ-1"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-review-and-enhance-text-styling-in-the-herosection-component-where-text-appears-over-the-furnace-background-image-ensuring-the-gradient-overlay-provides-sufficient-contrast-for-white-text",
-      "title": "Review and enhance text styling in the HeroSection component where text appears over the furnace background image, ensuring the gradient overlay provides sufficient contrast for white text",
-      "reqIds": [
-        "REQ-2"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-enhance-text-visibility-in-the-contactsection-component-where-the-whatsapp-contact-information-appears-over-the-refinery-interior-background-image",
-      "title": "Enhance text visibility in the ContactSection component where the WhatsApp contact information appears over the refinery interior background image",
+      "id": "feature-display-gold-price-formatted-as-indian-rupees-per-10-grams-e-g-159-000-10g",
+      "title": "Display gold price formatted as Indian Rupees per 10 grams (e.g., ₹159,000/10g)",
       "reqIds": [
         "REQ-3"
       ],
       "version": 1
     },
     {
-      "id": "feature-improve-text-contrast-in-productcard-components-especially-for-product-titles-and-purity-badge-text",
-      "title": "Improve text contrast in ProductCard components, especially for product titles and purity badge text",
+      "id": "feature-display-silver-price-formatted-as-indian-rupees-per-kilogram-e-g-265-000-kg",
+      "title": "Display silver price formatted as Indian Rupees per kilogram (e.g., ₹265,000/kg)",
       "reqIds": [
         "REQ-4"
       ],
       "version": 1
     },
     {
-      "id": "feature-review-and-optimize-text-colors-in-the-liveratesdashboard-to-ensure-price-displays-gst-breakdown-and-percentage-changes-are-easily-readable",
-      "title": "Review and optimize text colors in the LiveRatesDashboard to ensure price displays, GST breakdown, and percentage changes are easily readable",
+      "id": "feature-remove-all-manual-refresh-requirements-prices-must-update-automatically-without-user-interaction",
+      "title": "Remove all manual refresh requirements - prices must update automatically without user interaction",
       "reqIds": [
         "REQ-5"
       ],
@@ -50,12 +39,28 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Improve text visibility with better color contrast",
+      "summary": "Display live gold and silver prices in Indian Rupees for Kolkata location with 5-minute auto-refresh",
       "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Configure backend to fetch live gold and silver prices specifically for Kolkata location in Indian Rupees (INR)",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Set automatic price refresh interval to exactly 5 minutes (300 seconds)",
+      "reqIds": [
+        "REQ-2"
+      ],
       "status": "pending"
     }
   ],
-  "projectName": "Improve text visibility and contrast",
+  "projectName": "Silver Gold Refinery",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }
