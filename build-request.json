@@ -1,0 +1,96 @@
+{
+  "kind": "build_request",
+  "title": "Remove error messages, use IBJA fallback prices, show Market Closed indicator",
+  "projectName": "Gururaj Bullion",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Remove all 'unable to fetch live prices' error messages, banners, and error state UI from MetalTicker and LiveRatesDashboard components. The ticker and dashboard must never display error text or error styling to the user under any circumstances.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "Remove the 'unable to fetch live prices' error message entirely — no ugly error banners"
+        ]
+      },
+      "acceptanceCriteria": [
+        "No error message or banner is visible in MetalTicker when live price fetch fails",
+        "No error message or banner is visible in LiveRatesDashboard when live price fetch fails",
+        "The ticker and dashboard continue to render content even when the API call fails"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "When live IBJA price fetch fails or returns no data, fall back silently to the last known IBJA prices defined in frontend/src/config/fallback.ts (Gold ₹159,000/10g, Silver ₹265,000/kg). Display these fallback prices in MetalTicker and LiveRatesDashboard without any error indicator.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "If live prices can't be fetched, fall back to the last recorded IBJA prices"
+        ]
+      },
+      "acceptanceCriteria": [
+        "When the live API is unavailable, MetalTicker displays the fallback Gold and Silver prices from fallback.ts",
+        "When the live API is unavailable, LiveRatesDashboard displays the fallback prices",
+        "No error text or styling accompanies the fallback prices"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "In useQueries.ts, track the timestamp of the last price change. If the fetched price has not changed for 1 hour or more (compared to the previously fetched price), set a 'marketClosed' flag to true in the returned data. Pass this flag to MetalTicker and LiveRatesDashboard.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "If there's been no price movement for 1 hour or more, display the last known IBJA price but show a subtle 'Market Closed' indicator"
+        ]
+      },
+      "acceptanceCriteria": [
+        "useQueries.ts exposes a marketClosed boolean that becomes true when prices have not moved for 60 minutes or more",
+        "MetalTicker receives and can consume the marketClosed flag",
+        "LiveRatesDashboard receives and can consume the marketClosed flag"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "When marketClosed is true, display a subtle 'Market Closed' indicator in MetalTicker (e.g., a small muted badge or label near the ticker) and in LiveRatesDashboard (e.g., a small pill or status badge). The indicator must be visually understated — not an error style — and must not replace or obscure the price values.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "show a subtle 'Market Closed' indicator instead",
+          "do mention market is closed in that case"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A subtle 'Market Closed' badge/label appears in MetalTicker when marketClosed is true",
+        "A subtle 'Market Closed' badge/label appears in LiveRatesDashboard when marketClosed is true",
+        "The indicator uses muted/neutral styling, not red error styling",
+        "Price values remain fully visible alongside the Market Closed indicator"
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not display any error messages, error banners, or error states to the user in the ticker or dashboard",
+    "Fallback prices must come from frontend/src/config/fallback.ts — do not hardcode new values",
+    "The 'Market Closed' indicator must be subtle and must not use error-style colors (e.g., no red)"
+  ],
+  "nonGoals": [
+    "Changing the backend polling logic or IBJA fetch mechanism",
+    "Adding new fallback price values beyond what is already in fallback.ts",
+    "Redesigning the overall layout of MetalTicker or LiveRatesDashboard"
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}

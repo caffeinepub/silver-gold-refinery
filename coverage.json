@@ -1,0 +1,83 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-24T19:30:59.770Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 4,
+    "implemented": 4,
+    "items": [
+      {
+        "id": "REQ-1",
+        "summary": "Remove all 'unable to fetch live prices' error messages, banners, and error state UI from MetalTicker and LiveRatesDashboard components. The ticker and dashboard must never display error text or error styling to the user under any circumstances.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/MetalTicker.tsx",
+          "frontend/src/components/LiveRatesDashboard.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/MetalTicker.tsx",
+          "frontend/src/components/LiveRatesDashboard.tsx"
+        ]
+      },
+      {
+        "id": "REQ-2",
+        "summary": "When live IBJA price fetch fails or returns no data, fall back silently to the last known IBJA prices defined in frontend/src/config/fallback.ts (Gold ₹159,000/10g, Silver ₹265,000/kg). Display these fallback prices in MetalTicker and LiveRatesDashboard without any error indicator.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/components/MetalTicker.tsx",
+          "frontend/src/components/LiveRatesDashboard.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/components/MetalTicker.tsx",
+          "frontend/src/components/LiveRatesDashboard.tsx"
+        ]
+      },
+      {
+        "id": "REQ-3",
+        "summary": "In useQueries.ts, track the timestamp of the last price change. If the fetched price has not changed for 1 hour or more (compared to the previously fetched price), set a 'marketClosed' flag to true in the returned data. Pass this flag to MetalTicker and LiveRatesDashboard.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/types/ibja.ts"
+        ],
+        "matchedFiles": [
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/types/ibja.ts"
+        ]
+      },
+      {
+        "id": "REQ-4",
+        "summary": "When marketClosed is true, display a subtle 'Market Closed' indicator in MetalTicker (e.g., a small muted badge or label near the ticker) and in LiveRatesDashboard (e.g., a small pill or status badge). The indicator must be visually understated — not an error style — and must not replace or obscure the price values.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/MetalTicker.tsx",
+          "frontend/src/components/LiveRatesDashboard.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/MetalTicker.tsx",
+          "frontend/src/components/LiveRatesDashboard.tsx"
+        ]
+      }
+    ]
+  },
+  "changedFiles": [
+    "build-request.json",
+    "feature_evidence.json",
+    "frontend-file-summaries.txt",
+    "frontend-implementation-plan.json",
+    "frontend/src/components/LiveRatesDashboard.tsx",
+    "frontend/src/components/MetalTicker.tsx",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/types/ibja.ts",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}

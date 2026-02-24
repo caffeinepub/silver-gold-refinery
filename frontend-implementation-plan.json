@@ -1,0 +1,97 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Remove error messages, use IBJA fallback prices, show Market Closed indicator",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Remove all 'unable to fetch live prices' error messages, banners, and error state UI from MetalTicker and LiveRatesDashboard components",
+      "acceptanceCriteria": [
+        "No error message or banner is visible in MetalTicker when live price fetch fails",
+        "No error message or banner is visible in LiveRatesDashboard when live price fetch fails",
+        "The ticker and dashboard continue to render content even when the API call fails"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/MetalTicker.tsx",
+          "operation": "modify",
+          "description": "Remove all error message rendering logic and error state UI elements from the component. Ensure the ticker continues to display content even when the price fetch fails, without showing any error text or error styling to the user."
+        },
+        {
+          "path": "frontend/src/components/LiveRatesDashboard.tsx",
+          "operation": "modify",
+          "description": "Remove all error message rendering logic, error banners, and error state UI elements from the dashboard component. Ensure the dashboard continues to display price data even when the API call fails, without showing any error text or error styling to the user."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "When live IBJA price fetch fails or returns no data, fall back silently to the last known IBJA prices defined in frontend/src/config/fallback.ts without any error indicator",
+      "acceptanceCriteria": [
+        "When the live API is unavailable, MetalTicker displays the fallback Gold and Silver prices from fallback.ts",
+        "When the live API is unavailable, LiveRatesDashboard displays the fallback prices",
+        "No error text or styling accompanies the fallback prices"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Import fallback prices from frontend/src/config/fallback.ts. Modify the useQuery hook to return the fallback Gold (₹159,000/10g) and Silver (₹265,000/kg) prices when the live IBJA API fetch fails, returns no data, or encounters an error. The fallback should be applied silently without setting any error state flags."
+        },
+        {
+          "path": "frontend/src/components/MetalTicker.tsx",
+          "operation": "modify",
+          "description": "Update the component to consume and display fallback prices from useQueries when live data is unavailable. Ensure the ticker renders fallback prices without any visual error indicators, maintaining the same styling as live prices."
+        },
+        {
+          "path": "frontend/src/components/LiveRatesDashboard.tsx",
+          "operation": "modify",
+          "description": "Update the component to consume and display fallback prices from useQueries when live data is unavailable. Ensure the dashboard renders fallback prices without any visual error indicators, maintaining the same card layout and styling as live prices."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Track the timestamp of the last price change and set a 'marketClosed' flag to true if the fetched price has not changed for 1 hour or more",
+      "acceptanceCriteria": [
+        "useQueries.ts exposes a marketClosed boolean that becomes true when prices have not moved for 60 minutes or more",
+        "MetalTicker receives and can consume the marketClosed flag",
+        "LiveRatesDashboard receives and can consume the marketClosed flag"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Add logic to track the timestamp of the last price change using a ref or state variable. Compare each newly fetched price with the previously fetched price for both gold and silver. If both prices have remained unchanged for 60 minutes or more, set a marketClosed boolean flag to true in the returned data structure. The returned object must expose the marketClosed flag alongside the existing metal price data."
+        },
+        {
+          "path": "frontend/src/types/ibja.ts",
+          "operation": "modify",
+          "description": "Update the TypeScript interface for metal price data to include a marketClosed optional boolean field, ensuring type safety when MetalTicker and LiveRatesDashboard consume the flag from useQueries."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Display a subtle 'Market Closed' indicator in MetalTicker and LiveRatesDashboard when marketClosed is true, using muted styling that does not obscure price values",
+      "acceptanceCriteria": [
+        "A subtle 'Market Closed' badge/label appears in MetalTicker when marketClosed is true",
+        "A subtle 'Market Closed' badge/label appears in LiveRatesDashboard when marketClosed is true",
+        "The indicator uses muted/neutral styling, not red error styling",
+        "Price values remain fully visible alongside the Market Closed indicator"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/MetalTicker.tsx",
+          "operation": "modify",
+          "description": "Add conditional rendering logic to display a subtle 'Market Closed' badge or label when the marketClosed flag from useQueries is true. Position the indicator near the ticker content (e.g., inline after the price values or as a small pill) using muted/neutral color styling (e.g., gray text, subtle border). Ensure the indicator does not use error-style colors like red and does not replace or obscure the price values. The ticker must continue to show gold and silver prices prominently."
+        },
+        {
+          "path": "frontend/src/components/LiveRatesDashboard.tsx",
+          "operation": "modify",
+          "description": "Add conditional rendering logic to display a subtle 'Market Closed' badge or status pill when the marketClosed flag from useQueries is true. Position the indicator within the dashboard layout (e.g., near the title or as a small badge on each rate card) using muted/neutral color styling (e.g., gray background, subtle text). Ensure the indicator does not use error-style colors like red and does not replace or obscure the price values. The dashboard must continue to show gold and silver rates prominently."
+        }
+      ]
+    }
+  ]
+}

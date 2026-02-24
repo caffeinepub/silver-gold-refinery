@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "Gold/silver price ticker web app with live price fetching, IBJA fallback prices, and Market Closed indicator when no price movement for 1+ hour.",
+  "architectural_notes": [
+    "When live price fetch fails, silently fall back to last recorded IBJA prices — never show error banners to the user",
+    "Show 'Market Closed' indicator (not error) when no price movement detected for 1 hour or more"
+  ],
+  "known_issues": [],
+  "isFixRequest": true,
+  "existing_features": [
+    {
+      "id": "feature-remove-all-unable-to-fetch-live-prices-error-messages-banners-and-error-state-ui-from-metalticker-and-liveratesdashboard-components-the-ticker-and-dashboard-must-never-display-error-text-or-error-styling-to-the-user-under-any-circumstances",
+      "title": "Remove all 'unable to fetch live prices' error messages, banners, and error state UI from MetalTicker and LiveRatesDashboard components. The ticker and dashboard must never display error text or error styling to the user under any circumstances.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-when-live-ibja-price-fetch-fails-or-returns-no-data-fall-back-silently-to-the-last-known-ibja-prices-defined-in-frontend-src-config-fallback-ts-gold-159-000-10g-silver-265-000-kg-display-these-fallback-prices-in-metalticker-and-liveratesdashboard-without-any-error-indicator",
+      "title": "When live IBJA price fetch fails or returns no data, fall back silently to the last known IBJA prices defined in frontend/src/config/fallback.ts (Gold ₹159,000/10g, Silver ₹265,000/kg). Display these fallback prices in MetalTicker and LiveRatesDashboard without any error indicator.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-in-usequeries-ts-track-the-timestamp-of-the-last-price-change-if-the-fetched-price-has-not-changed-for-1-hour-or-more-compared-to-the-previously-fetched-price-set-a-marketclosed-flag-to-true-in-the-returned-data-pass-this-flag-to-metalticker-and-liveratesdashboard",
+      "title": "In useQueries.ts, track the timestamp of the last price change. If the fetched price has not changed for 1 hour or more (compared to the previously fetched price), set a 'marketClosed' flag to true in the returned data. Pass this flag to MetalTicker and LiveRatesDashboard.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-when-marketclosed-is-true-display-a-subtle-market-closed-indicator-in-metalticker-e-g-a-small-muted-badge-or-label-near-the-ticker-and-in-liveratesdashboard-e-g-a-small-pill-or-status-badge-the-indicator-must-be-visually-understated-not-an-error-style-and-must-not-replace-or-obscure-the-price-values",
+      "title": "When marketClosed is true, display a subtle 'Market Closed' indicator in MetalTicker (e.g., a small muted badge or label near the ticker) and in LiveRatesDashboard (e.g., a small pill or status badge). The indicator must be visually understated — not an error style — and must not replace or obscure the price values.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Remove 'unable to fetch live prices' error message; fall back to last recorded IBJA prices when live data unavailable; show subtle 'Market Closed' indicator when no price movement for 1+ hour",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "Gururaj Bullion",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}
