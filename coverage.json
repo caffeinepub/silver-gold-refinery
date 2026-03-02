@@ -1,47 +1,57 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-03-02T11:04:58.447Z",
+  "generatedAt": "2026-03-02T11:16:54.538Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 2,
+    "total": 3,
     "implemented": 2,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Update the hardcoded fallback gold price in frontend/src/config/fallback.ts to ₹1,70,000 per 10g (Gold 24K).",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/config/fallback.ts"
-        ],
-        "matchedFiles": [
-          "frontend/src/config/fallback.ts"
-        ]
+        "summary": "Update the backend Motoko actor in backend/main.mo to periodically fetch live gold and silver prices from the IBJA rates endpoint using HTTP outcalls on a 10-second recurring timer, exposing a query method that returns the latest fetched prices (or fallback values of Gold 24K ₹1,70,000/10g and Silver ₹3,09,000/kg when the API is unavailable or returns an error).",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
       },
       {
         "id": "REQ-2",
-        "summary": "Update the hardcoded fallback silver price in frontend/src/config/fallback.ts to ₹3,09,000 per kg.",
+        "summary": "Update frontend/src/hooks/useQueries.ts to poll the backend canister actor for live prices using React Query with a 10-second refetch interval (as defined in frontend/src/config/refresh.ts), falling back to the hardcoded values in frontend/src/config/fallback.ts when the backend returns an error or unavailable prices.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/config/fallback.ts"
+          "frontend/src/hooks/useQueries.ts"
         ],
         "matchedFiles": [
-          "frontend/src/config/fallback.ts"
+          "frontend/src/hooks/useQueries.ts"
+        ]
+      },
+      {
+        "id": "REQ-3",
+        "summary": "Update LiveRatesDashboard.tsx and MetalTicker.tsx to reflect auto-refreshing prices: show a visual indicator (e.g., a pulsing dot or 'Live' badge) when prices are being fetched from the IBJA API, and display the last-updated timestamp so users know when prices were last refreshed.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/LiveRatesDashboard.tsx",
+          "frontend/src/components/MetalTicker.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/LiveRatesDashboard.tsx",
+          "frontend/src/components/MetalTicker.tsx"
         ]
       }
     ]
   },
   "changedFiles": [
+    "backend/main.mo",
     "build-request.json",
-    "build-template/README.md",
-    "caffeine.lock.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/config/fallback.ts",
+    "frontend/src/components/LiveRatesDashboard.tsx",
+    "frontend/src/components/MetalTicker.tsx",
+    "frontend/src/hooks/useQueries.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

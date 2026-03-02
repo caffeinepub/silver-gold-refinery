@@ -14,16 +14,12 @@ actor {
     await OutCall.httpGetRequest(IBJA_RATES_URL, [], transformBackend);
   };
 
-  func startContinuousPriceUpdates<system>() {
+  public shared ({ caller }) func initialize<system>() : async () {
     ignore Timer.recurringTimer<system>(
       #seconds(PRICE_UPDATE_INTERVAL_SECONDS.toNat()),
       func() : async () {
         ignore updateMetalPrices();
       },
     );
-  };
-
-  public func initialize<system>() : async () {
-    startContinuousPriceUpdates<system>();
   };
 };

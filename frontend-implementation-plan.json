@@ -1,35 +1,44 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Update fallback gold and silver prices",
+  "title": "Add auto-refresh for live IBJA gold and silver prices",
   "requirements": [
     {
-      "id": "REQ-1",
-      "summary": "Update the hardcoded fallback gold price to ₹1,70,000 per 10g (Gold 24K)",
+      "id": "REQ-2",
+      "summary": "Poll backend canister for live prices every 10 seconds using React Query with fallback to hardcoded values when backend is unavailable",
       "acceptanceCriteria": [
-        "The fallback gold price is set to 170000 (₹1,70,000 per 10g) in frontend/src/config/fallback.ts.",
-        "When the IBJA API is unavailable, the dashboard and ticker display ₹1,70,000/10g for Gold 24K."
+        "useQueries.ts polls the backend actor query method every 10 seconds",
+        "Prices displayed in LiveRatesDashboard and MetalTicker update automatically without user interaction",
+        "Fallback values from frontend/src/config/fallback.ts are used when the backend call fails",
+        "Loading states and error states are handled gracefully"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/config/fallback.ts",
+          "path": "frontend/src/hooks/useQueries.ts",
           "operation": "modify",
-          "description": "Update the FALLBACK_GOLD_PRICE constant from 85500 to 170000 to reflect the new fallback rate of ₹1,70,000 per 10g for Gold 24K."
+          "description": "Update the metal prices query hook to call the backend canister's query method for live IBJA prices instead of the direct IBJA API fetch. Use React Query's refetchInterval option set to REFETCH_INTERVAL from frontend/src/config/refresh.ts (10 seconds) to enable automatic polling. When the backend call fails or returns an error, fall back to the hardcoded prices from frontend/src/config/fallback.ts. Ensure the hook returns loading states, error states, and the fetched or fallback prices to support UI indicators."
         }
       ]
     },
     {
-      "id": "REQ-2",
-      "summary": "Update the hardcoded fallback silver price to ₹3,09,000 per kg",
+      "id": "REQ-3",
+      "summary": "Display live indicator and last-updated timestamp in LiveRatesDashboard and MetalTicker to show auto-refreshing price status",
       "acceptanceCriteria": [
-        "The fallback silver price is set to 309000 (₹3,09,000 per kg) in frontend/src/config/fallback.ts.",
-        "When the IBJA API is unavailable, the dashboard and ticker display ₹3,09,000/kg for Silver."
+        "A 'Live' or pulsing indicator is visible in LiveRatesDashboard and MetalTicker when auto-refresh is active",
+        "A last-updated timestamp is displayed and updates after each successful price fetch",
+        "The manual refresh button in LiveRatesDashboard still works and triggers an immediate re-fetch",
+        "Loading skeleton states appear during fetch intervals as before"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/config/fallback.ts",
+          "path": "frontend/src/components/LiveRatesDashboard.tsx",
           "operation": "modify",
-          "description": "Update the FALLBACK_SILVER_PRICE constant from 96000 to 309000 to reflect the new fallback rate of ₹3,09,000 per kg for Silver."
+          "description": "Add a visual 'Live' badge or pulsing dot indicator near the dashboard title to show when auto-refresh is active and prices are being fetched from the backend. Display a last-updated timestamp below the rates that shows when prices were last successfully fetched, formatting it as a relative time (e.g., 'Updated 3 seconds ago'). Ensure the existing manual refresh button still triggers an immediate query invalidation and re-fetch. Maintain the current loading skeleton states during fetch intervals."
+        },
+        {
+          "path": "frontend/src/components/MetalTicker.tsx",
+          "operation": "modify",
+          "description": "Add a compact 'Live' badge or pulsing dot indicator next to the ticker prices to show when auto-refresh is active. Display a last-updated timestamp in a subtle format (e.g., small text showing 'Updated 5s ago') that updates after each successful price fetch. Ensure the ticker continues to show trend indicators (up/down/neutral) and market open/closed status alongside the new live indicator and timestamp."
         }
       ]
     }

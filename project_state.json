@@ -1,34 +1,48 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "Live IBJA gold and silver price tracker displaying Gold 24K and Silver rates, with static fallback values (Gold: ₹1,70,000/10g, Silver: ₹3,09,000/kg) and auto-refreshing live updates from the IBJA API.",
+  "summary": "Jewelry/gold-silver pricing app with live price display. Currently building auto-refresh feature to pull live gold and silver prices from the IBJA API, with fallback values (Gold 24K at ₹1,70,000/10g, Silver at ₹3,09,000/kg).",
   "architectural_notes": [
-    "Static fallback prices: Gold 24K = ₹1,70,000/10g, Silver = ₹3,09,000/kg",
-    "Live prices fetched from IBJA API with auto-refresh"
+    "Live price data sourced from IBJA API with periodic auto-refresh; fallback to static values when API unavailable"
   ],
   "known_issues": [],
   "isFixRequest": false,
   "existing_features": [
     {
-      "id": "feature-update-the-hardcoded-fallback-gold-price-in-frontend-src-config-fallback-ts-to-1-70-000-per-10g-gold-24k",
-      "title": "Update the hardcoded fallback gold price in frontend/src/config/fallback.ts to ₹1,70,000 per 10g (Gold 24K).",
-      "reqIds": [
-        "REQ-1"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-update-the-hardcoded-fallback-silver-price-in-frontend-src-config-fallback-ts-to-3-09-000-per-kg",
-      "title": "Update the hardcoded fallback silver price in frontend/src/config/fallback.ts to ₹3,09,000 per kg.",
+      "id": "feature-update-frontend-src-hooks-usequeries-ts-to-poll-the-backend-canister-actor-for-live-prices-using-react-query-with-a-10-second-refetch-interval-as-defined-in-frontend-src-config-refresh-ts-falling-back-to-the-hardcoded-values-in-frontend-src-config-fallback-ts-when-the-backend-returns-an-error-or-unavailable-prices",
+      "title": "Update frontend/src/hooks/useQueries.ts to poll the backend canister actor for live prices using React Query with a 10-second refetch interval (as defined in frontend/src/config/refresh.ts), falling back to the hardcoded values in frontend/src/config/fallback.ts when the backend returns an error or unavailable prices.",
       "reqIds": [
         "REQ-2"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-update-liveratesdashboard-tsx-and-metalticker-tsx-to-reflect-auto-refreshing-prices-show-a-visual-indicator-e-g-a-pulsing-dot-or-live-badge-when-prices-are-being-fetched-from-the-ibja-api-and-display-the-last-updated-timestamp-so-users-know-when-prices-were-last-refreshed",
+      "title": "Update LiveRatesDashboard.tsx and MetalTicker.tsx to reflect auto-refreshing prices: show a visual indicator (e.g., a pulsing dot or 'Live' badge) when prices are being fetched from the IBJA API, and display the last-updated timestamp so users know when prices were last refreshed.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
     }
   ],
-  "new_feature_requests": [],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Auto-refresh live gold and silver prices from IBJA API with fallback values (Gold 24K ₹1,70,000/10g, Silver ₹3,09,000/kg)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Update the backend Motoko actor in backend/main.mo to periodically fetch live gold and silver prices from the IBJA rates endpoint using HTTP outcalls on a 10-second recurring timer, exposing a query method that returns the latest fetched prices (or fallback values of Gold 24K ₹1,70,000/10g and Silver ₹3,09,000/kg when the API is unavailable or returns an error).",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "status": "pending"
+    }
+  ],
   "gameProjectType": "none",
-  "projectName": "IBJA Gold & Silver Price Tracker",
+  "projectName": "Gururaj Bullion",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

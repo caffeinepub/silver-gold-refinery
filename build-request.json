@@ -1,50 +1,82 @@
 {
   "kind": "build_request",
-  "title": "Update fallback gold and silver prices",
+  "title": "Add auto-refresh for live IBJA gold and silver prices",
+  "projectName": "Gururaj Bullion",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Update the hardcoded fallback gold price in frontend/src/config/fallback.ts to ₹1,70,000 per 10g (Gold 24K).",
-      "target": "frontend",
+      "text": "Update the backend Motoko actor in backend/main.mo to periodically fetch live gold and silver prices from the IBJA rates endpoint using HTTP outcalls on a 10-second recurring timer, exposing a query method that returns the latest fetched prices (or fallback values of Gold 24K ₹1,70,000/10g and Silver ₹3,09,000/kg when the API is unavailable or returns an error).",
+      "target": "backend",
       "source": {
         "messageIds": [
-          "msg-last"
+          "msg-6",
+          "msg-7"
         ],
         "quotes": [
-          "Change gold to 170000/10 gm"
+          "add live auto-refresh from the IBJA API on top of these fallback values",
+          "Yes auto refresh prices"
         ]
       },
       "acceptanceCriteria": [
-        "The fallback gold price is set to 170000 (₹1,70,000 per 10g) in frontend/src/config/fallback.ts.",
-        "When the IBJA API is unavailable, the dashboard and ticker display ₹1,70,000/10g for Gold 24K."
+        "Backend actor fetches from the IBJA rates URL every 10 seconds via HTTP outcalls",
+        "A query method returns the most recently fetched gold and silver prices",
+        "When the IBJA API call fails or returns invalid data, the fallback values (Gold 24K ₹1,70,000/10g, Silver ₹3,09,000/kg) are returned instead",
+        "The transform function correctly processes IBJA HTTP responses"
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Update the hardcoded fallback silver price in frontend/src/config/fallback.ts to ₹3,09,000 per kg.",
+      "text": "Update frontend/src/hooks/useQueries.ts to poll the backend canister actor for live prices using React Query with a 10-second refetch interval (as defined in frontend/src/config/refresh.ts), falling back to the hardcoded values in frontend/src/config/fallback.ts when the backend returns an error or unavailable prices.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-last"
+          "msg-6",
+          "msg-7"
         ],
         "quotes": [
-          "silver to 309000/kg"
+          "auto-refresh functionality to pull live gold and silver prices from the IBJA API",
+          "automatic periodic updates"
         ]
       },
       "acceptanceCriteria": [
-        "The fallback silver price is set to 309000 (₹3,09,000 per kg) in frontend/src/config/fallback.ts.",
-        "When the IBJA API is unavailable, the dashboard and ticker display ₹3,09,000/kg for Silver."
+        "useQueries.ts polls the backend actor query method every 10 seconds",
+        "Prices displayed in LiveRatesDashboard and MetalTicker update automatically without user interaction",
+        "Fallback values from frontend/src/config/fallback.ts are used when the backend call fails",
+        "Loading states and error states are handled gracefully"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Update LiveRatesDashboard.tsx and MetalTicker.tsx to reflect auto-refreshing prices: show a visual indicator (e.g., a pulsing dot or 'Live' badge) when prices are being fetched from the IBJA API, and display the last-updated timestamp so users know when prices were last refreshed.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-6",
+          "msg-7"
+        ],
+        "quotes": [
+          "users always see the latest rates"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A 'Live' or pulsing indicator is visible in LiveRatesDashboard and MetalTicker when auto-refresh is active",
+        "A last-updated timestamp is displayed and updates after each successful price fetch",
+        "The manual refresh button in LiveRatesDashboard still works and triggers an immediate re-fetch",
+        "Loading skeleton states appear during fetch intervals as before"
       ]
     }
   ],
   "constraints": [
-    "Only update the fallback price values; do not change any other logic, layout, or API integration."
+    "Fallback prices must remain Gold 24K ₹1,70,000/10g and Silver ₹3,09,000/kg",
+    "Do not modify files in frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, or frontend/src/components/ui",
+    "All backend logic must remain in backend/main.mo as a single actor"
   ],
   "nonGoals": [
-    "Changing live API data sources or parsing logic.",
-    "Modifying the UI layout or styling.",
-    "Updating any backend logic."
+    "Adding user authentication or login for price viewing",
+    "Storing historical price data",
+    "Push notifications for price changes",
+    "Changing the existing visual design or color theme"
   ],
   "imageRequirements": {
     "required": [],

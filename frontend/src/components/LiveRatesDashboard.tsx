@@ -1,6 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { TrendingUp, RefreshCw, Radio, Moon } from "lucide-react";
 import { useMetalPricesQuery } from "@/hooks/useQueries";
+
+function useRelativeTime(timestampMs: number | undefined): string {
+  const [relativeTime, setRelativeTime] = useState<string>("");
+
+  useEffect(() => {
+    if (!timestampMs) {
+      setRelativeTime("");
+      return;
+    }
+
+    const update = () => {
+      const seconds = Math.floor((Date.now() - timestampMs) / 1000);
+      if (seconds < 5) setRelativeTime("just now");
+      else if (seconds < 60) setRelativeTime(`${seconds}s ago`);
+      else {
+        const minutes = Math.floor(seconds / 60);
+        setRelativeTime(`${minutes}m ago`);
+      }
+    };
+
+    update();
+    const interval = setInterval(update, 1000);
+    return () => clearInterval(interval);
+  }, [timestampMs]);
+
+  return relativeTime;
+}
 
 const LiveRatesDashboard: React.FC = () => {
   const {
@@ -9,6 +36,8 @@ const LiveRatesDashboard: React.FC = () => {
     refetch,
     isFetching,
   } = useMetalPricesQuery();
+
+  const relativeTime = useRelativeTime(prices?.lastFetchedAt);
 
   const formatPrice = (price: number) =>
     new Intl.NumberFormat("en-IN", {
@@ -114,8 +143,11 @@ const LiveRatesDashboard: React.FC = () => {
         {prices?.lastUpdated && (
           <div className="mb-6 flex items-center gap-2 text-xs text-yellow-200 font-medium">
             <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse inline-block" />
-            Last updated: {prices.lastUpdated} IST · Auto-refreshes every 10
-            seconds
+            <span>
+              Updated {relativeTime} · {prices.lastUpdated} IST
+            </span>
+            <span className="text-yellow-300/60">·</span>
+            <span className="text-yellow-300/80">Auto-refreshes every 10s</span>
           </div>
         )}
 

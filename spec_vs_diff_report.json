@@ -1,14 +1,82 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-03-02T11:04:58.444Z",
-  "summary": "Both REQ-1 and REQ-2 are implemented correctly. The fallback.ts file has been updated with gold = 170000 and silver = 309000, matching the required values exactly. No extra logic, layout, or API integration was changed.",
-  "missing_requirements": [],
-  "hallucinated_features": [],
-  "confidence": 0.97,
+  "generatedAt": "2026-03-02T11:16:54.535Z",
+  "summary": "The diff implements REQ-2 and REQ-3 partially, with useQueries.ts polling at 10-second intervals, LiveRatesDashboard and MetalTicker showing live indicators and last-updated timestamps, and manual refresh working. However, REQ-1 (backend) is only partially implemented: the Motoko actor sets up a timer and HTTP outcall but is missing a query method to expose prices to the frontend, missing fallback values, and missing proper price storage/state. The frontend (useQueries.ts) still fetches directly from the IBJA API client-side rather than polling the backend canister actor as required by REQ-2.",
+  "missing_requirements": [
+    {
+      "id": "REQ-1",
+      "requirement": "Backend actor must expose a query method returning the latest fetched gold and silver prices (or fallback values)",
+      "reason": "The modified backend/main.mo has no stable variables to store fetched prices, no query method returning gold/silver prices, and no fallback values (Gold 24K Rs1,70,000/10g, Silver Rs3,09,000/kg). Only a timer setup and an HTTP outcall function are present.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-1",
+      "requirement": "The transform function must correctly process IBJA HTTP responses and fallback values must be returned when API fails",
+      "reason": "The actor delegates to OutCall.transform without any custom IBJA response parsing logic or fallback price assignment in main.mo. There is no error-handling path that sets fallback prices.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "requirement": "useQueries.ts must poll the backend canister actor query method for live prices, not directly call the IBJA API",
+      "reason": "The updated useQueries.ts still fetches directly from IBJA_RATES_URL via client-side fetch() rather than calling the backend canister actor's query method. It does not use any ICP actor or canister client.",
+      "evidence": [
+        "frontend/src/hooks/useQueries.ts"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "requirement": "Fallback values must come from frontend/src/config/fallback.ts when the backend canister call fails",
+      "reason": "While FALLBACK_PRICES is imported from fallback.ts, the fallback is applied when the direct IBJA fetch fails, not when a backend canister call fails, since the canister is never called.",
+      "evidence": [
+        "frontend/src/hooks/useQueries.ts"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Market closed detection based on 60-minute price stagnation and IST market hours (Mon-Sat 9AM-5PM)",
+      "reason": "The build request does not mention market status detection, market open/closed indicators, or IST business hours logic. This logic was added in useQueries.ts and surfaced in both dashboard components.",
+      "evidence": [
+        "frontend/src/hooks/useQueries.ts",
+        "frontend/src/components/LiveRatesDashboard.tsx",
+        "frontend/src/components/MetalTicker.tsx"
+      ]
+    },
+    {
+      "description": "Price trend tracking (up/down/neutral) with TrendingUp/TrendingDown icons in MetalTicker",
+      "reason": "The build request does not request price trend indicators or directional arrows; only a live/pulsing indicator and last-updated timestamp were requested.",
+      "evidence": [
+        "frontend/src/components/MetalTicker.tsx"
+      ]
+    },
+    {
+      "description": "GST breakdown display including goldWithGst, silverWithGst, goldCgst, goldSgst, silverCgst, silverSgst in MetalPrice interface and components",
+      "reason": "The build request does not mention GST calculations or breakdown display as part of the auto-refresh feature requirements.",
+      "evidence": [
+        "frontend/src/hooks/useQueries.ts",
+        "frontend/src/components/LiveRatesDashboard.tsx"
+      ]
+    },
+    {
+      "description": "initialize() function requiring a manual call to start the recurring timer rather than using system-level auto-start",
+      "reason": "The build request specifies a 10-second recurring timer that runs automatically; requiring an explicit initialize() call is not specified and may break the auto-start behavior.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    }
+  ],
+  "confidence": 0.82,
   "changed_files": [
+    "backend/main.mo",
     "frontend-file-summaries.txt",
-    "frontend/src/config/fallback.ts",
+    "frontend/src/components/LiveRatesDashboard.tsx",
+    "frontend/src/components/MetalTicker.tsx",
+    "frontend/src/hooks/useQueries.ts",
     "project_state.json"
   ]
 }

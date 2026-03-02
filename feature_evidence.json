@@ -2,29 +2,10 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-update-the-hardcoded-fallback-gold-price-in-frontend-src-config-fallback-ts-to-1-70-000-per-10g-gold-24k",
-      "featureTitle": "Update the hardcoded fallback gold price in frontend/src/config/fallback.ts to ₹1,70,000 per 10g (Gold 24K).",
+      "featureId": "feature-update-frontend-src-hooks-usequeries-ts-to-poll-the-backend-canister-actor-for-live-prices-using-react-query-with-a-10-second-refetch-interval-as-defined-in-frontend-src-config-refresh-ts-falling-back-to-the-hardcoded-values-in-frontend-src-config-fallback-ts-when-the-backend-returns-an-error-or-unavailable-prices",
+      "featureTitle": "Update frontend/src/hooks/useQueries.ts to poll the backend canister actor for live prices using React Query with a 10-second refetch interval (as defined in frontend/src/config/refresh.ts), falling back to the hardcoded values in frontend/src/config/fallback.ts when the backend returns an error or unavailable prices.",
       "files": [
-        "frontend/src/config/fallback.ts"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0",
-        "http-outcalls@3.0.0"
-      ],
-      "testIds": [
-        "REQ-1"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-update-the-hardcoded-fallback-silver-price-in-frontend-src-config-fallback-ts-to-3-09-000-per-kg",
-      "featureTitle": "Update the hardcoded fallback silver price in frontend/src/config/fallback.ts to ₹3,09,000 per kg.",
-      "files": [
-        "frontend/src/config/fallback.ts"
+        "frontend/src/hooks/useQueries.ts"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -36,6 +17,26 @@
       ],
       "testIds": [
         "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-liveratesdashboard-tsx-and-metalticker-tsx-to-reflect-auto-refreshing-prices-show-a-visual-indicator-e-g-a-pulsing-dot-or-live-badge-when-prices-are-being-fetched-from-the-ibja-api-and-display-the-last-updated-timestamp-so-users-know-when-prices-were-last-refreshed",
+      "featureTitle": "Update LiveRatesDashboard.tsx and MetalTicker.tsx to reflect auto-refreshing prices: show a visual indicator (e.g., a pulsing dot or 'Live' badge) when prices are being fetched from the IBJA API, and display the last-updated timestamp so users know when prices were last refreshed.",
+      "files": [
+        "frontend/src/components/LiveRatesDashboard.tsx",
+        "frontend/src/components/MetalTicker.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
       ],
       "confidence": "high"
     }

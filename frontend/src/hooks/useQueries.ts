@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { IBJA_RATES_URL, BACKEND_FETCH_INTERVAL, REQUEST_TIMEOUT } from '@/config/api';
+import { IBJA_RATES_URL, REQUEST_TIMEOUT } from '@/config/api';
+import { REFETCH_INTERVAL, STALE_TIME } from '@/config/refresh';
 import { FALLBACK_PRICES } from '@/config/fallback';
 
 export interface MetalPrice {
@@ -14,6 +15,7 @@ export interface MetalPrice {
   goldWithGst: number;
   silverWithGst: number;
   lastUpdated: string;
+  lastFetchedAt: number; // Unix timestamp ms for relative time display
   isMarketOpen: boolean;
   marketClosed: boolean;
   source: string;
@@ -93,6 +95,7 @@ function buildMetalPrice(
       minute: '2-digit',
       second: '2-digit',
     }),
+    lastFetchedAt: now,
     isMarketOpen,
     marketClosed,
     source,
@@ -135,7 +138,6 @@ async function fetchIBJARates(): Promise<MetalPrice> {
     let silver999PerKg = 0;
 
     // Format 1: Array of objects with Purity + GoldRate + SilverRate
-    // e.g. [{"RateDate":"...","Purity":"999","GoldRate":"87500","SilverRate":"95000"}]
     if (Array.isArray(data)) {
       // Prefer the 999 purity entry
       const entry999 = (data as Record<string, unknown>[]).find(
@@ -212,8 +214,8 @@ export function useMetalPricesQuery() {
   return useQuery<MetalPrice>({
     queryKey: ['metalPrices'],
     queryFn: fetchIBJARates,
-    refetchInterval: BACKEND_FETCH_INTERVAL,
-    staleTime: BACKEND_FETCH_INTERVAL - 1000,
+    refetchInterval: REFETCH_INTERVAL,
+    staleTime: STALE_TIME,
     retry: false, // Fallback is handled inside queryFn
   });
 }

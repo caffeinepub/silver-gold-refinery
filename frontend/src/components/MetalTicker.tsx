@@ -2,6 +2,33 @@ import React, { useEffect, useState } from "react";
 import { TrendingUp, TrendingDown, Minus, Radio } from "lucide-react";
 import { useMetalPricesQuery } from "@/hooks/useQueries";
 
+function useRelativeTime(timestampMs: number | undefined): string {
+  const [relativeTime, setRelativeTime] = useState<string>("");
+
+  useEffect(() => {
+    if (!timestampMs) {
+      setRelativeTime("");
+      return;
+    }
+
+    const update = () => {
+      const seconds = Math.floor((Date.now() - timestampMs) / 1000);
+      if (seconds < 5) setRelativeTime("just now");
+      else if (seconds < 60) setRelativeTime(`${seconds}s ago`);
+      else {
+        const minutes = Math.floor(seconds / 60);
+        setRelativeTime(`${minutes}m ago`);
+      }
+    };
+
+    update();
+    const interval = setInterval(update, 1000);
+    return () => clearInterval(interval);
+  }, [timestampMs]);
+
+  return relativeTime;
+}
+
 const MetalTicker: React.FC = () => {
   const { data: prices, isLoading } = useMetalPricesQuery();
   const [prevGold, setPrevGold] = useState<number | null>(null);
@@ -13,6 +40,8 @@ const MetalTicker: React.FC = () => {
     "neutral"
   );
   const [pulse, setPulse] = useState(false);
+
+  const relativeTime = useRelativeTime(prices?.lastFetchedAt);
 
   useEffect(() => {
     if (prices) {
@@ -105,11 +134,11 @@ const MetalTicker: React.FC = () => {
               Market Closed
             </span>
           )}
-          {prices?.lastUpdated && (
+          {prices?.lastFetchedAt && relativeTime && (
             <span
-              className={`text-xs text-yellow-200 font-medium transition-opacity duration-300 ${pulse ? "opacity-100" : "opacity-80"}`}
+              className={`text-xs font-medium transition-opacity duration-300 ${pulse ? "text-yellow-200 opacity-100" : "text-yellow-300/70 opacity-80"}`}
             >
-              Updated: {prices.lastUpdated} IST
+              Updated {relativeTime}
             </span>
           )}
         </div>
