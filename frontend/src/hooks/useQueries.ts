@@ -1,5 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
-import { FALLBACK_PRICES } from "@/config/fallback";
+import { useQuery } from '@tanstack/react-query';
+import { IBJA_RATES_URL, BACKEND_FETCH_INTERVAL, REQUEST_TIMEOUT } from '@/config/api';
+import { FALLBACK_PRICES } from '@/config/fallback';
 
 export interface MetalPrice {
   gold999Per10g: number;
@@ -18,49 +19,50 @@ export interface MetalPrice {
   source: string;
 }
 
-// Track last price change timestamp and last known prices across fetches
+// Module-level state to track price changes across fetches
 let lastPriceChangeTime: number = Date.now();
-let lastKnownGold: number | null = null;
-let lastKnownSilver: number | null = null;
+let lastKnownGold: number = FALLBACK_PRICES.gold;
+let lastKnownSilver: number = FALLBACK_PRICES.silver;
+let prevGold: number = 0;
+let prevSilver: number = 0;
 
 function buildMetalPrice(
   gold999Per10g: number,
   silver999PerKg: number,
   source: string
 ): MetalPrice {
-  // Detect price movement
   const now = Date.now();
-  if (lastKnownGold !== null && lastKnownSilver !== null) {
-    if (gold999Per10g !== lastKnownGold || silver999PerKg !== lastKnownSilver) {
+
+  // Track price movement for market-closed detection
+  if (prevGold !== 0 && prevSilver !== 0) {
+    if (gold999Per10g !== prevGold || silver999PerKg !== prevSilver) {
       lastPriceChangeTime = now;
     }
   } else {
-    // First fetch — reset timer
     lastPriceChangeTime = now;
   }
-  lastKnownGold = gold999Per10g;
-  lastKnownSilver = silver999PerKg;
+  prevGold = gold999Per10g;
+  prevSilver = silver999PerKg;
 
   // Market closed if no price movement for 60+ minutes
   const minutesSinceChange = (now - lastPriceChangeTime) / (1000 * 60);
   const marketClosed = minutesSinceChange >= 60;
 
-  // Calculate 3% GST (1.5% CGST + 1.5% SGST)
+  // 3% GST (1.5% CGST + 1.5% SGST)
   const GST_RATE = 0.03;
-  const CGST_RATE = 0.015;
-  const SGST_RATE = 0.015;
+  const HALF_GST = 0.015;
 
   const goldGst = gold999Per10g * GST_RATE;
-  const goldCgst = gold999Per10g * CGST_RATE;
-  const goldSgst = gold999Per10g * SGST_RATE;
+  const goldCgst = gold999Per10g * HALF_GST;
+  const goldSgst = gold999Per10g * HALF_GST;
   const goldWithGst = gold999Per10g + goldGst;
 
   const silverGst = silver999PerKg * GST_RATE;
-  const silverCgst = silver999PerKg * CGST_RATE;
-  const silverSgst = silver999PerKg * SGST_RATE;
+  const silverCgst = silver999PerKg * HALF_GST;
+  const silverSgst = silver999PerKg * HALF_GST;
   const silverWithGst = silver999PerKg + silverGst;
 
-  // Market hours: Mon-Sat 9:00 AM - 5:00 PM IST
+  // Market hours: Mon–Sat 9:00 AM – 5:00 PM IST
   const nowDate = new Date();
   const istOffset = 5.5 * 60 * 60 * 1000;
   const istTime = new Date(nowDate.getTime() + istOffset);
@@ -85,11 +87,11 @@ function buildMetalPrice(
     silverSgst,
     goldWithGst,
     silverWithGst,
-    lastUpdated: new Date().toLocaleTimeString("en-IN", {
-      timeZone: "Asia/Kolkata",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
+    lastUpdated: new Date().toLocaleTimeString('en-IN', {
+      timeZone: 'Asia/Kolkata',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
     }),
     isMarketOpen,
     marketClosed,
@@ -98,81 +100,120 @@ function buildMetalPrice(
 }
 
 async function fetchIBJARates(): Promise<MetalPrice> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT);
+
   try {
-    const response = await fetch("https://rates.ibja.co/", {
+    const response = await fetch(IBJA_RATES_URL, {
+      signal: controller.signal,
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Cache-Control': 'no-cache',
       },
-      mode: "cors",
     });
 
     if (!response.ok) {
-      throw new Error(`IBJA API error: ${response.status}`);
+      throw new Error(`IBJA HTTP error: ${response.status}`);
     }
 
-    const data = await response.json();
+    const text = await response.text();
+
+    let data: unknown;
+    try {
+      data = JSON.parse(text);
+    } catch {
+      // Try to extract a JSON array from HTML/script content
+      const jsonMatch = text.match(/\[[\s\S]*?\]/);
+      if (jsonMatch) {
+        data = JSON.parse(jsonMatch[0]);
+      } else {
+        throw new Error('Could not parse IBJA response as JSON');
+      }
+    }
 
     let gold999Per10g = 0;
     let silver999PerKg = 0;
 
+    // Format 1: Array of objects with Purity + GoldRate + SilverRate
+    // e.g. [{"RateDate":"...","Purity":"999","GoldRate":"87500","SilverRate":"95000"}]
     if (Array.isArray(data)) {
-      for (const item of data) {
-        const name = (item.RateName || item.rateName || item.name || "")
-          .toString()
-          .toLowerCase();
-        const rateStr = (
-          item.Rates ||
-          item.rates ||
-          item.Rate ||
-          item.rate ||
-          "0"
-        ).toString();
-        const rate = parseFloat(rateStr.replace(/,/g, ""));
+      // Prefer the 999 purity entry
+      const entry999 = (data as Record<string, unknown>[]).find(
+        (item) => String(item['Purity'] ?? item['purity'] ?? '').trim() === '999'
+      );
 
-        if (name.includes("gold") && name.includes("999")) {
-          gold999Per10g = rate;
-        } else if (name.includes("silver") && name.includes("999")) {
-          silver999PerKg = rate;
+      if (entry999) {
+        const gr = entry999['GoldRate'] ?? entry999['goldRate'] ?? entry999['Gold'] ?? entry999['gold'];
+        const sr = entry999['SilverRate'] ?? entry999['silverRate'] ?? entry999['Silver'] ?? entry999['silver'];
+        gold999Per10g = parseFloat(String(gr ?? '0').replace(/,/g, ''));
+        silver999PerKg = parseFloat(String(sr ?? '0').replace(/,/g, ''));
+      }
+
+      // Fallback: scan all items for RateName-style fields
+      if (!gold999Per10g || !silver999PerKg) {
+        for (const item of data as Record<string, unknown>[]) {
+          const name = String(
+            item['RateName'] ?? item['rateName'] ?? item['name'] ?? ''
+          ).toLowerCase();
+          const rateStr = String(
+            item['Rates'] ?? item['rates'] ?? item['Rate'] ?? item['rate'] ?? '0'
+          );
+          const rate = parseFloat(rateStr.replace(/,/g, ''));
+
+          if (!gold999Per10g && name.includes('gold') && name.includes('999')) {
+            gold999Per10g = rate;
+          } else if (!silver999PerKg && name.includes('silver') && name.includes('999')) {
+            silver999PerKg = rate;
+          }
         }
       }
-    } else if (typeof data === "object" && data !== null) {
-      const keys = Object.keys(data);
-      for (const key of keys) {
-        const keyLower = key.toLowerCase();
-        const val = data[key];
-        const rate =
-          typeof val === "number"
-            ? val
-            : parseFloat(String(val).replace(/,/g, ""));
 
-        if (keyLower.includes("gold") && keyLower.includes("999")) {
-          gold999Per10g = rate;
-        } else if (keyLower.includes("silver") && keyLower.includes("999")) {
-          silver999PerKg = rate;
+      // Fallback: first item with GoldRate/SilverRate regardless of purity
+      if (!gold999Per10g || !silver999PerKg) {
+        for (const item of data as Record<string, unknown>[]) {
+          const gr = item['GoldRate'] ?? item['goldRate'] ?? item['Gold'] ?? item['gold'];
+          const sr = item['SilverRate'] ?? item['silverRate'] ?? item['Silver'] ?? item['silver'];
+          if (gr && sr) {
+            gold999Per10g = parseFloat(String(gr).replace(/,/g, ''));
+            silver999PerKg = parseFloat(String(sr).replace(/,/g, ''));
+            break;
+          }
         }
       }
+    }
+
+    // Format 2: Plain object
+    if ((!gold999Per10g || !silver999PerKg) && data && typeof data === 'object' && !Array.isArray(data)) {
+      const obj = data as Record<string, unknown>;
+      const gr = obj['GoldRate'] ?? obj['goldRate'] ?? obj['Gold'] ?? obj['gold'];
+      const sr = obj['SilverRate'] ?? obj['silverRate'] ?? obj['Silver'] ?? obj['silver'];
+      if (gr) gold999Per10g = parseFloat(String(gr).replace(/,/g, ''));
+      if (sr) silver999PerKg = parseFloat(String(sr).replace(/,/g, ''));
     }
 
     if (!gold999Per10g || !silver999PerKg) {
-      throw new Error("Could not parse gold/silver prices from IBJA response");
+      throw new Error('Could not extract gold/silver 999 prices from IBJA response');
     }
 
-    return buildMetalPrice(gold999Per10g, silver999PerKg, "IBJA");
+    // Update last known prices on success
+    lastKnownGold = gold999Per10g;
+    lastKnownSilver = silver999PerKg;
+
+    return buildMetalPrice(gold999Per10g, silver999PerKg, 'IBJA');
   } catch {
-    // Silently fall back to last known IBJA prices — no error exposed to UI
-    const fallbackGold = lastKnownGold ?? FALLBACK_PRICES.GOLD_PER_10G;
-    const fallbackSilver = lastKnownSilver ?? FALLBACK_PRICES.SILVER_PER_KG;
-    return buildMetalPrice(fallbackGold, fallbackSilver, "IBJA (cached)");
+    // Silently fall back to last known prices — no error exposed to UI
+    return buildMetalPrice(lastKnownGold, lastKnownSilver, 'IBJA (cached)');
+  } finally {
+    clearTimeout(timeout);
   }
 }
 
 export function useMetalPricesQuery() {
   return useQuery<MetalPrice>({
-    queryKey: ["metalPrices"],
+    queryKey: ['metalPrices'],
     queryFn: fetchIBJARates,
-    refetchInterval: 10000, // 10 seconds
-    staleTime: 9000, // 9 seconds
-    retry: false, // We handle fallback inside queryFn
+    refetchInterval: BACKEND_FETCH_INTERVAL,
+    staleTime: BACKEND_FETCH_INTERVAL - 1000,
+    retry: false, // Fallback is handled inside queryFn
   });
 }

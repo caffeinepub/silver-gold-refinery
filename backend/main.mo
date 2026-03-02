@@ -2,8 +2,6 @@ import OutCall "http-outcalls/outcall";
 import Nat64 "mo:core/Nat64";
 import Timer "mo:core/Timer";
 
-
-
 actor {
   let IBJA_RATES_URL = "https://rates.ibja.co/";
   let PRICE_UPDATE_INTERVAL_SECONDS : Nat64 = 10;
@@ -29,4 +27,3 @@ actor {
     startContinuousPriceUpdates<system>();
   };
 };
-

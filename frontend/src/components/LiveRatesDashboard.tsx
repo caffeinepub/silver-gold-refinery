@@ -22,10 +22,10 @@ const LiveRatesDashboard: React.FC = () => {
       <section className="py-12 bg-neutral-950">
         <div className="max-w-5xl mx-auto px-4">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-gold-400 mb-2">
+            <h2 className="text-3xl font-bold text-yellow-400 mb-2">
               Live Metal Rates
             </h2>
-            <p className="text-gold-400/60 text-sm">
+            <p className="text-yellow-200 text-sm font-medium">
               Fetching live IBJA rates...
             </p>
           </div>
@@ -33,7 +33,7 @@ const LiveRatesDashboard: React.FC = () => {
             {[1, 2].map((i) => (
               <div
                 key={i}
-                className="bg-neutral-900 rounded-2xl p-6 border border-gold-500/20 animate-pulse"
+                className="bg-neutral-900 rounded-2xl p-6 border border-yellow-600/20 animate-pulse"
               >
                 <div className="h-6 bg-neutral-800 rounded mb-4 w-1/2" />
                 <div className="h-10 bg-neutral-800 rounded mb-3 w-3/4" />
@@ -52,18 +52,18 @@ const LiveRatesDashboard: React.FC = () => {
         {/* Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-3">
           <div>
-            <h2 className="text-3xl font-bold text-gold-400">
+            <h2 className="text-3xl font-bold text-yellow-400">
               Live Metal Rates
             </h2>
-            <p className="text-gold-400/60 text-sm mt-1">
+            <p className="text-yellow-200 text-sm mt-1 font-medium">
               Source: IBJA (India Bullion &amp; Jewellers Association)
             </p>
           </div>
           <div className="flex items-center gap-3 flex-wrap">
             {/* Live badge */}
-            <div className="flex items-center gap-1.5 bg-red-900/30 border border-red-500/40 rounded-full px-3 py-1">
+            <div className="flex items-center gap-1.5 bg-red-900/40 border border-red-500/60 rounded-full px-3 py-1">
               <Radio className="w-3 h-3 text-red-400 animate-pulse" />
-              <span className="text-xs font-bold text-red-400 tracking-widest">
+              <span className="text-xs font-bold text-red-300 tracking-widest">
                 LIVE
               </span>
             </div>
@@ -72,23 +72,23 @@ const LiveRatesDashboard: React.FC = () => {
             {prices && (
               <>
                 {prices.marketClosed ? (
-                  <div className="flex items-center gap-1.5 bg-neutral-800/60 border border-neutral-600/40 rounded-full px-3 py-1">
-                    <Moon className="w-3 h-3 text-neutral-400" />
-                    <span className="text-xs font-semibold text-neutral-400">
+                  <div className="flex items-center gap-1.5 bg-neutral-800 border border-neutral-600 rounded-full px-3 py-1">
+                    <Moon className="w-3 h-3 text-neutral-300" />
+                    <span className="text-xs font-semibold text-neutral-300">
                       Market Closed
                     </span>
                   </div>
                 ) : prices.isMarketOpen ? (
-                  <div className="flex items-center gap-1.5 bg-green-900/30 border border-green-500/40 rounded-full px-3 py-1">
+                  <div className="flex items-center gap-1.5 bg-green-900/40 border border-green-500/60 rounded-full px-3 py-1">
                     <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                    <span className="text-xs font-semibold text-green-400">
+                    <span className="text-xs font-semibold text-green-300">
                       Market Open
                     </span>
                   </div>
                 ) : (
-                  <div className="flex items-center gap-1.5 bg-neutral-800/60 border border-neutral-600/40 rounded-full px-3 py-1">
-                    <Moon className="w-3 h-3 text-neutral-400" />
-                    <span className="text-xs font-semibold text-neutral-400">
+                  <div className="flex items-center gap-1.5 bg-neutral-800 border border-neutral-600 rounded-full px-3 py-1">
+                    <Moon className="w-3 h-3 text-neutral-300" />
+                    <span className="text-xs font-semibold text-neutral-300">
                       Market Closed
                     </span>
                   </div>
@@ -100,7 +100,7 @@ const LiveRatesDashboard: React.FC = () => {
             <button
               onClick={() => refetch()}
               disabled={isFetching}
-              className="flex items-center gap-1.5 px-3 py-1 bg-gold-500/10 border border-gold-500/30 rounded-full text-gold-400 text-xs hover:bg-gold-500/20 transition-colors disabled:opacity-50"
+              className="flex items-center gap-1.5 px-3 py-1 bg-yellow-500/15 border border-yellow-500/50 rounded-full text-yellow-300 text-xs hover:bg-yellow-500/25 transition-colors disabled:opacity-50 font-medium"
             >
               <RefreshCw
                 className={`w-3 h-3 ${isFetching ? "animate-spin" : ""}`}
@@ -112,7 +112,7 @@ const LiveRatesDashboard: React.FC = () => {
 
         {/* Last updated */}
         {prices?.lastUpdated && (
-          <div className="mb-6 flex items-center gap-2 text-xs text-gold-400/50">
+          <div className="mb-6 flex items-center gap-2 text-xs text-yellow-200 font-medium">
             <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse inline-block" />
             Last updated: {prices.lastUpdated} IST · Auto-refreshes every 10
             seconds
@@ -121,9 +121,9 @@ const LiveRatesDashboard: React.FC = () => {
 
         {/* Market Closed notice — subtle, informational only */}
         {prices?.marketClosed && (
-          <div className="mb-6 flex items-center gap-2 bg-neutral-900/60 border border-neutral-700/40 rounded-xl px-4 py-3">
-            <Moon className="w-4 h-4 text-neutral-400 shrink-0" />
-            <p className="text-xs text-neutral-400">
+          <div className="mb-6 flex items-center gap-2 bg-neutral-800 border border-neutral-600 rounded-xl px-4 py-3">
+            <Moon className="w-4 h-4 text-neutral-300 shrink-0" />
+            <p className="text-xs text-neutral-300 font-medium">
               Prices shown are the last recorded IBJA rates. The market has been
               inactive for over an hour.
             </p>
@@ -134,15 +134,15 @@ const LiveRatesDashboard: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           {/* Gold Card */}
           {prices && (
-            <div className="bg-gradient-to-br from-neutral-900 to-neutral-800 rounded-2xl p-6 border border-gold-500/30 shadow-lg shadow-gold-500/5">
+            <div className="bg-gradient-to-br from-neutral-900 to-neutral-800 rounded-2xl p-6 border border-yellow-600/40 shadow-lg shadow-yellow-500/5">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <span className="text-2xl">🥇</span>
                   <div>
-                    <h3 className="text-lg font-bold text-gold-400">
+                    <h3 className="text-lg font-bold text-yellow-400">
                       Gold 999
                     </h3>
-                    <p className="text-xs text-gold-400/50">Per 10 grams</p>
+                    <p className="text-xs text-yellow-200 font-medium">Per 10 grams</p>
                   </div>
                 </div>
                 <TrendingUp className="w-5 h-5 text-green-400" />
@@ -152,33 +152,33 @@ const LiveRatesDashboard: React.FC = () => {
                 <div className="text-3xl font-bold text-white font-mono">
                   {formatPrice(prices.gold999Per10g)}
                 </div>
-                <div className="text-xs text-gold-400/50 mt-1">
+                <div className="text-xs text-yellow-200 font-medium mt-1">
                   Base price (excl. GST)
                 </div>
               </div>
 
-              <div className="bg-neutral-950/50 rounded-xl p-4 space-y-2">
+              <div className="bg-neutral-950/70 rounded-xl p-4 space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span className="text-gold-400/70">Base Price</span>
-                  <span className="text-white font-mono">
+                  <span className="text-yellow-300 font-medium">Base Price</span>
+                  <span className="text-white font-mono font-semibold">
                     {formatPrice(prices.gold999Per10g)}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gold-400/70">CGST (1.5%)</span>
-                  <span className="text-yellow-300 font-mono">
+                  <span className="text-yellow-300 font-medium">CGST (1.5%)</span>
+                  <span className="text-yellow-200 font-mono font-semibold">
                     +{formatPrice(prices.goldCgst)}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gold-400/70">SGST (1.5%)</span>
-                  <span className="text-yellow-300 font-mono">
+                  <span className="text-yellow-300 font-medium">SGST (1.5%)</span>
+                  <span className="text-yellow-200 font-mono font-semibold">
                     +{formatPrice(prices.goldSgst)}
                   </span>
                 </div>
-                <div className="border-t border-gold-500/20 pt-2 flex justify-between text-sm font-bold">
-                  <span className="text-gold-400">Total (incl. GST)</span>
-                  <span className="text-gold-300 font-mono">
+                <div className="border-t border-yellow-600/30 pt-2 flex justify-between text-sm font-bold">
+                  <span className="text-yellow-400">Total (incl. GST)</span>
+                  <span className="text-yellow-300 font-mono">
                     {formatPrice(prices.goldWithGst)}
                   </span>
                 </div>
@@ -188,15 +188,15 @@ const LiveRatesDashboard: React.FC = () => {
 
           {/* Silver Card */}
           {prices && (
-            <div className="bg-gradient-to-br from-neutral-900 to-neutral-800 rounded-2xl p-6 border border-silver-400/30 shadow-lg shadow-silver-400/5">
+            <div className="bg-gradient-to-br from-neutral-900 to-neutral-800 rounded-2xl p-6 border border-slate-400/40 shadow-lg shadow-slate-400/5">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <span className="text-2xl">🥈</span>
                   <div>
-                    <h3 className="text-lg font-bold text-silver-300">
+                    <h3 className="text-lg font-bold text-slate-200">
                       Silver 999
                     </h3>
-                    <p className="text-xs text-silver-400/50">Per kilogram</p>
+                    <p className="text-xs text-slate-300 font-medium">Per kilogram</p>
                   </div>
                 </div>
                 <TrendingUp className="w-5 h-5 text-green-400" />
@@ -206,33 +206,33 @@ const LiveRatesDashboard: React.FC = () => {
                 <div className="text-3xl font-bold text-white font-mono">
                   {formatPrice(prices.silver999PerKg)}
                 </div>
-                <div className="text-xs text-silver-400/50 mt-1">
+                <div className="text-xs text-slate-300 font-medium mt-1">
                   Base price (excl. GST)
                 </div>
               </div>
 
-              <div className="bg-neutral-950/50 rounded-xl p-4 space-y-2">
+              <div className="bg-neutral-950/70 rounded-xl p-4 space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span className="text-silver-400/70">Base Price</span>
-                  <span className="text-white font-mono">
+                  <span className="text-slate-300 font-medium">Base Price</span>
+                  <span className="text-white font-mono font-semibold">
                     {formatPrice(prices.silver999PerKg)}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-silver-400/70">CGST (1.5%)</span>
-                  <span className="text-yellow-300 font-mono">
+                  <span className="text-slate-300 font-medium">CGST (1.5%)</span>
+                  <span className="text-slate-200 font-mono font-semibold">
                     +{formatPrice(prices.silverCgst)}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-silver-400/70">SGST (1.5%)</span>
-                  <span className="text-yellow-300 font-mono">
+                  <span className="text-slate-300 font-medium">SGST (1.5%)</span>
+                  <span className="text-slate-200 font-mono font-semibold">
                     +{formatPrice(prices.silverSgst)}
                   </span>
                 </div>
-                <div className="border-t border-silver-400/20 pt-2 flex justify-between text-sm font-bold">
-                  <span className="text-silver-300">Total (incl. GST)</span>
-                  <span className="text-silver-200 font-mono">
+                <div className="border-t border-slate-500/40 pt-2 flex justify-between text-sm font-bold">
+                  <span className="text-slate-200">Total (incl. GST)</span>
+                  <span className="text-white font-mono">
                     {formatPrice(prices.silverWithGst)}
                   </span>
                 </div>
@@ -242,7 +242,7 @@ const LiveRatesDashboard: React.FC = () => {
         </div>
 
         {/* Disclaimer */}
-        <p className="text-center text-xs text-gold-400/30">
+        <p className="text-center text-xs text-neutral-400 font-medium">
           Rates are indicative. Actual transaction prices may vary. GST @ 3%
           included in total.
         </p>

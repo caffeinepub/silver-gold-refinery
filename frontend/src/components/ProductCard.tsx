@@ -13,7 +13,7 @@ interface ProductCardProps {
 
 const ProductCard = memo(function ProductCard({ title, image, purityLevels, formats, color }: ProductCardProps) {
   return (
-    <Card className="overflow-hidden hover:shadow-xl transition-shadow duration-300 border-2">
+    <Card className="overflow-hidden hover:shadow-xl transition-shadow duration-300 border-2 bg-card">
       <div className="relative h-64 overflow-hidden bg-muted">
         <img 
           src={image} 
@@ -25,8 +25,8 @@ const ProductCard = memo(function ProductCard({ title, image, purityLevels, form
           <Badge 
             className={`text-sm font-bold shadow-lg ${
               color === 'gold' 
-                ? 'bg-gold text-gold-foreground border-2 border-gold/50' 
-                : 'bg-silver text-silver-foreground border-2 border-silver/50'
+                ? 'bg-amber-500 text-white border-2 border-amber-400' 
+                : 'bg-slate-500 text-white border-2 border-slate-400'
             }`}
           >
             {title}
@@ -35,7 +35,7 @@ const ProductCard = memo(function ProductCard({ title, image, purityLevels, form
       </div>
       
       <CardHeader>
-        <CardTitle className="text-2xl text-foreground">{title}</CardTitle>
+        <CardTitle className="text-2xl text-foreground font-bold">{title}</CardTitle>
       </CardHeader>
       
       <CardContent className="space-y-4">
@@ -44,7 +44,7 @@ const ProductCard = memo(function ProductCard({ title, image, purityLevels, form
           <div className="space-y-2">
             {purityLevels.map((purity, index) => (
               <div key={index} className="flex items-center gap-2">
-                <CheckCircle2 className={`w-5 h-5 ${color === 'gold' ? 'text-gold' : 'text-silver'}`} />
+                <CheckCircle2 className={`w-5 h-5 ${color === 'gold' ? 'text-amber-600' : 'text-slate-500'}`} />
                 <span className="text-lg font-semibold text-foreground">{purity}</span>
               </div>
             ))}
@@ -57,8 +57,8 @@ const ProductCard = memo(function ProductCard({ title, image, purityLevels, form
             <div className="space-y-2">
               {formats.map((format, index) => (
                 <div key={index} className="flex items-center gap-2">
-                  <CheckCircle2 className={`w-5 h-5 ${color === 'gold' ? 'text-gold' : 'text-silver'}`} />
-                  <span className="text-base font-medium text-foreground">{format}</span>
+                  <CheckCircle2 className={`w-5 h-5 ${color === 'gold' ? 'text-amber-600' : 'text-slate-500'}`} />
+                  <span className="text-base font-semibold text-foreground">{format}</span>
                 </div>
               ))}
             </div>
