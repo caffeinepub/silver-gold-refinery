@@ -1,8 +1,4 @@
-// API configuration for backend metal prices endpoint
-export const API_CONFIG = {
-  // Backend will fetch from IBJA every 300 seconds
-  BACKEND_FETCH_INTERVAL: 300,
-  
-  // Timeout for backend calls (in milliseconds)
-  TIMEOUT: 10000,
-};
+// API configuration for IBJA metal prices
+export const IBJA_RATES_URL = "https://rates.ibja.co/";
+export const BACKEND_FETCH_INTERVAL = 10000; // 10 seconds in ms
+export const REQUEST_TIMEOUT = 8000; // 8 seconds timeout

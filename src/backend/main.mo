@@ -1,30 +1,25 @@
 import OutCall "http-outcalls/outcall";
+import Nat64 "mo:core/Nat64";
 import Timer "mo:core/Timer";
 
 actor {
-  let IBJA_URL = "https://ibjarates.com/";
-  let PRICE_UPDATE_INTERVAL_SECONDS : Nat64 = 300;
+  let IBJA_RATES_URL = "https://rates.ibja.co/";
+  let PRICE_UPDATE_INTERVAL_SECONDS : Nat64 = 10;
 
-  func updateMetalPrices() : async Text {
-    await OutCall.httpGetRequest(IBJA_URL, [], transformBackend);
+  public query func transformBackend(input : OutCall.TransformationInput) : async OutCall.TransformationOutput {
+    OutCall.transform(input);
   };
 
-  func startContinuousPriceUpdates<system>() {
+  func updateMetalPrices() : async Text {
+    await OutCall.httpGetRequest(IBJA_RATES_URL, [], transformBackend);
+  };
+
+  public shared ({ caller }) func initialize<system>() : async () {
     ignore Timer.recurringTimer<system>(
       #seconds(PRICE_UPDATE_INTERVAL_SECONDS.toNat()),
       func() : async () {
         ignore updateMetalPrices();
       },
     );
-  };
-
-  public query func transformBackend(
-    input : OutCall.TransformationInput,
-  ) : async OutCall.TransformationOutput {
-    OutCall.transform(input);
-  };
-
-  public func initialize<system>() : async () {
-    startContinuousPriceUpdates<system>();
   };
 };

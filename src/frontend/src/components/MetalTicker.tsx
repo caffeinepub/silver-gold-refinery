@@ -1,186 +1,197 @@
-import { useMetalPrices, getMarketStatus } from '../hooks/useQueries';
-import { TrendingUp, TrendingDown } from 'lucide-react';
-import { useMemo, useState, useEffect } from 'react';
-import type { MarketStatus } from '../hooks/useQueries';
+import { useMetalPricesQuery } from "@/hooks/useQueries";
+import { Minus, Radio, TrendingDown, TrendingUp } from "lucide-react";
+import type React from "react";
+import { useEffect, useRef, useState } from "react";
 
-export default function MetalTicker() {
-  const { data: prices } = useMetalPrices();
-  const [marketStatus, setMarketStatus] = useState<MarketStatus>('open');
+function useRelativeTime(timestampMs: number | undefined): string {
+  const [relativeTime, setRelativeTime] = useState<string>("");
 
-  // Update market status periodically
   useEffect(() => {
-    const updateStatus = () => {
-      setMarketStatus(getMarketStatus());
+    if (!timestampMs) {
+      setRelativeTime("");
+      return;
+    }
+
+    const update = () => {
+      const seconds = Math.floor((Date.now() - timestampMs) / 1000);
+      if (seconds < 5) setRelativeTime("just now");
+      else if (seconds < 60) setRelativeTime(`${seconds}s ago`);
+      else {
+        const minutes = Math.floor(seconds / 60);
+        setRelativeTime(`${minutes}m ago`);
+      }
     };
 
-    updateStatus();
-    const interval = setInterval(updateStatus, 30000);
-
+    update();
+    const interval = setInterval(update, 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [timestampMs]);
 
-  const formatIndianNumber = useMemo(() => {
-    return (num: number): string => {
-      return new Intl.NumberFormat('en-IN', {
-        maximumFractionDigits: 2,
-      }).format(num);
-    };
-  }, []);
+  return relativeTime;
+}
 
-  const formatLastUpdate = (timestamp: number | undefined): string => {
-    if (!timestamp) return 'N/A';
-    const date = new Date(timestamp);
-    return date.toLocaleString('en-IN', {
-      timeZone: 'Asia/Kolkata',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true,
-    });
+const MetalTicker: React.FC = () => {
+  const { data: prices, isLoading } = useMetalPricesQuery();
+  const prevGoldRef = useRef<number | null>(null);
+  const prevSilverRef = useRef<number | null>(null);
+  const [goldTrend, setGoldTrend] = useState<"up" | "down" | "neutral">(
+    "neutral",
+  );
+  const [silverTrend, setSilverTrend] = useState<"up" | "down" | "neutral">(
+    "neutral",
+  );
+  const [pulse, setPulse] = useState(false);
+
+  const relativeTime = useRelativeTime(prices?.lastFetchedAt);
+
+  useEffect(() => {
+    if (prices) {
+      if (prevGoldRef.current !== null) {
+        if (prices.gold999Per10g > prevGoldRef.current) setGoldTrend("up");
+        else if (prices.gold999Per10g < prevGoldRef.current)
+          setGoldTrend("down");
+        else setGoldTrend("neutral");
+      }
+      if (prevSilverRef.current !== null) {
+        if (prices.silver999PerKg > prevSilverRef.current) setSilverTrend("up");
+        else if (prices.silver999PerKg < prevSilverRef.current)
+          setSilverTrend("down");
+        else setSilverTrend("neutral");
+      }
+      prevGoldRef.current = prices.gold999Per10g;
+      prevSilverRef.current = prices.silver999PerKg;
+      setPulse(true);
+      const t = setTimeout(() => setPulse(false), 800);
+      return () => clearTimeout(t);
+    }
+  }, [prices]);
+
+  const formatPrice = (price: number) =>
+    new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+      maximumFractionDigits: 0,
+    }).format(price);
+
+  const TrendIcon = ({ trend }: { trend: "up" | "down" | "neutral" }) => {
+    if (trend === "up")
+      return <TrendingUp className="w-4 h-4 text-green-400 inline" />;
+    if (trend === "down")
+      return <TrendingDown className="w-4 h-4 text-red-400 inline" />;
+    return <Minus className="w-4 h-4 text-yellow-300 inline" />;
   };
 
-  const getMarketStatusBadge = () => {
-    if (marketStatus === 'closed_weekend') {
-      return (
-        <span className="px-3 py-1 bg-red-600 text-white text-xs font-semibold rounded-full">
-          CLOSED - WEEKEND
-        </span>
-      );
-    }
-    if (marketStatus === 'closed_inactivity') {
-      return (
-        <span className="px-3 py-1 bg-orange-600 text-white text-xs font-semibold rounded-full">
-          CLOSED
-        </span>
-      );
-    }
-    return (
-      <span className="px-3 py-1 bg-green-600 text-white text-xs font-semibold rounded-full animate-pulse">
-        LIVE
-      </span>
-    );
-  };
+  const tickerItems = prices
+    ? [
+        {
+          label: "GOLD 999",
+          unit: "/10g",
+          price: prices.gold999Per10g,
+          trend: goldTrend,
+        },
+        {
+          label: "SILVER BUY",
+          unit: "/kg",
+          price: prices.silverBuyPerKg,
+          trend: silverTrend,
+        },
+        {
+          label: "SILVER SELL",
+          unit: "/kg",
+          price: prices.silverSellPerKg,
+          trend: silverTrend,
+        },
+        {
+          label: "GOLD + GST",
+          unit: "/10g",
+          price: prices.goldWithGst,
+          trend: goldTrend,
+        },
+        {
+          label: "SILVER BUY+GST",
+          unit: "/kg",
+          price: prices.silverBuyWithGst,
+          trend: silverTrend,
+        },
+        {
+          label: "SILVER SELL+GST",
+          unit: "/kg",
+          price: prices.silverSellWithGst,
+          trend: silverTrend,
+        },
+      ]
+    : [];
 
-  if (!prices) {
-    return (
-      <div className="bg-gradient-to-r from-gold/10 via-silver/10 to-gold/10 border-b border-gold/20 py-2">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground">
-            <span>Loading live rates...</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const tickerKey = (label: string, repeat: number) => `${label}-${repeat}`;
 
   return (
-    <div className="bg-gradient-to-r from-gold/10 via-silver/10 to-gold/10 border-b border-gold/20 py-2 overflow-hidden">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between gap-4 text-sm">
-          {/* Market Status Badge */}
-          <div className="flex-shrink-0">
-            {getMarketStatusBadge()}
-          </div>
-
-          {/* Scrolling Ticker Content */}
-          <div className="flex-1 overflow-hidden">
-            <div className="flex items-center gap-8 animate-scroll-ticker whitespace-nowrap">
-              {/* Gold Price */}
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-gold">GOLD 999</span>
-                <span className="text-foreground font-semibold">
-                  ₹{formatIndianNumber(prices.gold.price)}/10g
-                </span>
-                {prices.gold.change !== 0 && (
-                  <span className={`flex items-center gap-1 ${prices.gold.change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                    {prices.gold.change >= 0 ? (
-                      <TrendingUp className="h-3 w-3" />
-                    ) : (
-                      <TrendingDown className="h-3 w-3" />
-                    )}
-                    <span className="text-xs font-medium">
-                      {prices.gold.change >= 0 ? '+' : ''}{formatIndianNumber(Math.abs(prices.gold.change))}
-                    </span>
-                  </span>
-                )}
-              </div>
-
-              {/* Separator */}
-              <span className="text-muted-foreground">|</span>
-
-              {/* Silver Price */}
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-silver">SILVER 999</span>
-                <span className="text-foreground font-semibold">
-                  ₹{formatIndianNumber(prices.silver.price)}/kg
-                </span>
-                {prices.silver.change !== 0 && (
-                  <span className={`flex items-center gap-1 ${prices.silver.change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                    {prices.silver.change >= 0 ? (
-                      <TrendingUp className="h-3 w-3" />
-                    ) : (
-                      <TrendingDown className="h-3 w-3" />
-                    )}
-                    <span className="text-xs font-medium">
-                      {prices.silver.change >= 0 ? '+' : ''}{formatIndianNumber(Math.abs(prices.silver.change))}
-                    </span>
-                  </span>
-                )}
-              </div>
-
-              {/* Separator */}
-              <span className="text-muted-foreground">|</span>
-
-              {/* Last Update */}
-              <div className="flex items-center gap-2 text-muted-foreground">
-                <span className="text-xs">Updated: {formatLastUpdate(prices.lastUpdate)}</span>
-              </div>
-
-              {/* Duplicate content for seamless loop */}
-              <span className="text-muted-foreground">|</span>
-              
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-gold">GOLD 999</span>
-                <span className="text-foreground font-semibold">
-                  ₹{formatIndianNumber(prices.gold.price)}/10g
-                </span>
-                {prices.gold.change !== 0 && (
-                  <span className={`flex items-center gap-1 ${prices.gold.change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                    {prices.gold.change >= 0 ? (
-                      <TrendingUp className="h-3 w-3" />
-                    ) : (
-                      <TrendingDown className="h-3 w-3" />
-                    )}
-                    <span className="text-xs font-medium">
-                      {prices.gold.change >= 0 ? '+' : ''}{formatIndianNumber(Math.abs(prices.gold.change))}
-                    </span>
-                  </span>
-                )}
-              </div>
-
-              <span className="text-muted-foreground">|</span>
-
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-silver">SILVER 999</span>
-                <span className="text-foreground font-semibold">
-                  ₹{formatIndianNumber(prices.silver.price)}/kg
-                </span>
-                {prices.silver.change !== 0 && (
-                  <span className={`flex items-center gap-1 ${prices.silver.change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                    {prices.silver.change >= 0 ? (
-                      <TrendingUp className="h-3 w-3" />
-                    ) : (
-                      <TrendingDown className="h-3 w-3" />
-                    )}
-                    <span className="text-xs font-medium">
-                      {prices.silver.change >= 0 ? '+' : ''}{formatIndianNumber(Math.abs(prices.silver.change))}
-                    </span>
-                  </span>
-                )}
-              </div>
-            </div>
-          </div>
+    <div className="bg-neutral-900 border-b border-yellow-600/30 overflow-hidden relative">
+      <div className="flex items-center justify-between px-3 py-1 bg-neutral-950 border-b border-yellow-600/20">
+        <div className="flex items-center gap-2">
+          <Radio className="w-3 h-3 text-red-500 animate-pulse" />
+          <span className="text-xs font-bold text-red-400 tracking-widest uppercase">
+            Live
+          </span>
+          <span className="text-xs text-yellow-300 font-medium">
+            IBJA Rates
+          </span>
         </div>
+        <div className="flex items-center gap-2">
+          {prices?.marketClosed || !prices?.isMarketOpen ? (
+            <span className="inline-flex items-center gap-1 text-xs text-neutral-300 font-medium bg-neutral-800 border border-neutral-600 rounded-full px-2 py-0.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-neutral-400 inline-block" />
+              Market Closed
+            </span>
+          ) : (
+            <span className="text-xs text-green-400 font-semibold">
+              ● Market Open
+            </span>
+          )}
+          {prices?.lastFetchedAt && relativeTime && (
+            <span
+              className={`text-xs font-medium transition-opacity duration-300 ${pulse ? "text-yellow-200 opacity-100" : "text-yellow-300/70 opacity-80"}`}
+            >
+              Updated {relativeTime}
+            </span>
+          )}
+        </div>
+      </div>
+
+      <div className="flex items-center h-10 overflow-hidden">
+        {isLoading && !prices && (
+          <div className="flex items-center gap-2 px-4 text-yellow-300 text-sm animate-pulse">
+            <span>Fetching live IBJA rates...</span>
+          </div>
+        )}
+        {tickerItems.length > 0 && (
+          <div className="ticker-scroll flex items-center gap-0 whitespace-nowrap">
+            {[0, 1, 2].flatMap((repeat) =>
+              tickerItems.map((item) => (
+                <span
+                  key={tickerKey(item.label, repeat)}
+                  className="inline-flex items-center gap-2 px-6 text-sm font-medium"
+                >
+                  <span className="text-yellow-400 font-bold tracking-wide">
+                    {item.label}
+                  </span>
+                  <span
+                    className={`font-mono font-bold transition-all duration-500 ${pulse ? "text-white scale-105" : "text-yellow-100"}`}
+                  >
+                    {formatPrice(item.price)}
+                  </span>
+                  <span className="text-yellow-300 text-xs font-medium">
+                    {item.unit}
+                  </span>
+                  <TrendIcon trend={item.trend} />
+                  <span className="text-yellow-600 mx-2">◆</span>
+                </span>
+              )),
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
-}
+};
+
+export default MetalTicker;

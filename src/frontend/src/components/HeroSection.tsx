@@ -1,12 +1,15 @@
-import { Sparkles } from 'lucide-react';
+import { Sparkles } from "lucide-react";
 
 export default function HeroSection() {
   return (
     <section className="relative h-[600px] flex items-center justify-center overflow-hidden">
       {/* Background Image */}
-      <div 
+      <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 hover:scale-105"
-        style={{ backgroundImage: 'url(/assets/generated/furnace-hero.dim_1920x1080.png)' }}
+        style={{
+          backgroundImage:
+            "url(/assets/generated/furnace-hero.dim_1920x1080.png)",
+        }}
       >
         {/* Enhanced gradient overlay for better text visibility */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/75 to-background" />
@@ -24,7 +27,8 @@ export default function HeroSection() {
           Certified High-Purity Silver & Gold Refinery
         </p>
         <p className="text-lg text-white/95 max-w-2xl mx-auto drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] animate-in fade-in slide-in-from-top-10 duration-700 delay-300">
-          Trusted source for refined precious metals with guaranteed purity standards
+          Trusted source for refined precious metals with guaranteed purity
+          standards
         </p>
       </div>
     </section>

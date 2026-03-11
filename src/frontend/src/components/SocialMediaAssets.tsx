@@ -1,29 +1,35 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Download, Instagram } from 'lucide-react';
-import { useCallback } from 'react';
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Download, Instagram } from "lucide-react";
+import { useCallback } from "react";
+
+const IMAGE_PATH = "/assets/generated/instagram-sponsor.dim_1080x1080.png";
 
 export default function SocialMediaAssets() {
-  const imagePath = '/assets/generated/instagram-sponsor.dim_1080x1080.png';
-
   const handleDownload = useCallback(() => {
-    const link = document.createElement('a');
-    link.href = imagePath;
-    link.download = 'gururaj-silver-refinery-instagram-sponsor.png';
+    const link = document.createElement("a");
+    link.href = IMAGE_PATH;
+    link.download = "gururaj-silver-refinery-instagram-sponsor.png";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  }, [imagePath]);
+  }, []);
 
   return (
     <section className="py-20 bg-background">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
               Social Media Assets
             </h2>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-lg text-muted-foreground font-medium">
               Download our promotional materials for Instagram
             </p>
           </div>
@@ -35,18 +41,19 @@ export default function SocialMediaAssets() {
                   <Instagram className="w-12 h-12 text-white" />
                 </div>
               </div>
-              <CardTitle className="text-2xl md:text-3xl">Instagram Sponsorship Post</CardTitle>
-              <CardDescription className="text-base">
-                Promote live gold & silver rates on your Instagram feed
+              <CardTitle className="text-2xl md:text-3xl text-foreground">
+                Instagram Sponsorship Post
+              </CardTitle>
+              <CardDescription className="text-base text-muted-foreground font-medium">
+                Promote live gold &amp; silver rates on your Instagram feed
               </CardDescription>
             </CardHeader>
-            
+
             <CardContent className="space-y-6">
-              {/* Image Preview */}
               <div className="bg-muted/50 rounded-lg p-4 flex justify-center">
                 <div className="max-w-md w-full">
-                  <img 
-                    src={imagePath}
+                  <img
+                    src={IMAGE_PATH}
                     alt="Instagram sponsorship post for live gold and silver rates"
                     className="w-full h-auto rounded-lg shadow-md border-2 border-border"
                     loading="lazy"
@@ -54,33 +61,43 @@ export default function SocialMediaAssets() {
                 </div>
               </div>
 
-              {/* Image Details */}
-              <div className="bg-muted/30 rounded-lg p-6 space-y-3">
+              <div className="bg-muted/40 rounded-lg p-6 space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm font-semibold text-muted-foreground">Format:</span>
-                  <span className="text-sm font-medium">Instagram Feed (Square)</span>
+                  <span className="text-sm font-semibold text-muted-foreground">
+                    Format:
+                  </span>
+                  <span className="text-sm font-semibold text-foreground">
+                    Instagram Feed (Square)
+                  </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm font-semibold text-muted-foreground">Dimensions:</span>
-                  <span className="text-sm font-medium">1080 × 1080 px</span>
+                  <span className="text-sm font-semibold text-muted-foreground">
+                    Dimensions:
+                  </span>
+                  <span className="text-sm font-semibold text-foreground">
+                    1080 × 1080 px
+                  </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm font-semibold text-muted-foreground">Theme:</span>
-                  <span className="text-sm font-medium">Gold & Silver Metallic</span>
+                  <span className="text-sm font-semibold text-muted-foreground">
+                    Theme:
+                  </span>
+                  <span className="text-sm font-semibold text-foreground">
+                    Gold &amp; Silver Metallic
+                  </span>
                 </div>
               </div>
 
-              {/* Download Button */}
-              <Button 
+              <Button
                 onClick={handleDownload}
                 size="lg"
-                className="w-full text-lg h-14 bg-gradient-to-r from-gold to-gold-dark hover:from-gold-dark hover:to-gold text-white font-semibold"
+                className="w-full text-lg h-14 bg-amber-600 hover:bg-amber-700 text-white font-bold shadow-lg"
               >
                 <Download className="w-6 h-6 mr-2" />
                 Download for Instagram
               </Button>
 
-              <p className="text-center text-sm text-muted-foreground">
+              <p className="text-center text-sm text-muted-foreground font-medium">
                 Perfect for Instagram posts, stories, and promotional campaigns
               </p>
             </CardContent>

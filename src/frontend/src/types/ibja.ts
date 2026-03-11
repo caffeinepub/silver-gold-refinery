@@ -17,6 +17,7 @@ export interface MetalPrice {
   withGST?: number;
   cgst?: number;
   sgst?: number;
+  marketClosed?: boolean;
 }
 
 export interface MetalPricesData {
@@ -24,4 +25,5 @@ export interface MetalPricesData {
   silver: MetalPrice;
   platinum: MetalPrice;
   lastUpdate?: number;
+  marketClosed?: boolean;
 }
